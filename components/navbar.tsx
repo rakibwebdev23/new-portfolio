@@ -1,11 +1,42 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, MessageSquare } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function Navbar() {
+    const [isVisible, setIsVisible] = useState(true)
+    const [lastScrollY, setLastScrollY] = useState(0)
+
+    useEffect(() => {
+        const controlNavbar = () => {
+            if (typeof window !== 'undefined') {
+                if (window.scrollY > lastScrollY && window.scrollY > 80) { // Scrolling down
+                    setIsVisible(false)
+                } else { // Scrolling up or at top
+                    setIsVisible(true)
+                }
+                setLastScrollY(window.scrollY)
+            }
+        }
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('scroll', controlNavbar)
+
+            // cleanup function
+            return () => {
+                window.removeEventListener('scroll', controlNavbar)
+            }
+        }
+    }, [lastScrollY])
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-white/5 py-4">
+        <nav className={cn(
+            "fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out",
+            "bg-black/40 backdrop-blur-xl border-b border-white/5 py-4",
+            isVisible ? "translate-y-0" : "-translate-y-full"
+        )}>
             <div className="container mx-auto px-6 flex items-center justify-between">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
