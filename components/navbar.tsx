@@ -33,11 +33,11 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out",
-            "bg-black/40 backdrop-blur-xl border-b border-white/5 py-4",
+            "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-transform duration-300 ease-in-out w-[95%] max-w-7xl",
+            "bg-black/20 backdrop-blur-md border border-white/10 rounded-lg pt-1 pb-4 shadow-2xl",
             isVisible ? "translate-y-0" : "-translate-y-full"
         )}>
-            <div className="container mx-auto px-6 flex items-center justify-between">
+            <div className="container mx-auto px-6 flex items-center justify-between pt-1">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-bold">
@@ -48,11 +48,28 @@ export function Navbar() {
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                    <a href="#" className="text-primary hover:text-primary transition-colors">Home</a>
-                    <a href="#services" className="hover:text-white transition-colors">Services</a>
-                    <a href="#portfolio" className="hover:text-white transition-colors">Portfolio</a>
-                    <a href="#blog" className="hover:text-white transition-colors">Blog</a>
-                    <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+                    {[
+                        { label: "Home", href: "#", active: true },
+                        { label: "Services", href: "#services" },
+                        { label: "Portfolio", href: "#portfolio" },
+                        { label: "Blog", href: "#blog" },
+                        { label: "Contact", href: "#contact" },
+                    ].map((link) => (
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            className={cn(
+                                "relative py-2 transition-colors duration-300 group",
+                                link.active ? "text-primary font-bold" : "hover:text-white"
+                            )}
+                        >
+                            {link.label}
+                            <span className={cn(
+                                "absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-300 ease-out origin-left",
+                                link.active ? "w-full" : "w-0 group-hover:w-full"
+                            )} />
+                        </a>
+                    ))}
                 </div>
 
                 {/* Right Side */}
@@ -67,7 +84,7 @@ export function Navbar() {
                 </div>
 
                 {/* Mobile Menu Toggle */}
-                <Button variant="ghost" size="icon" className="md:hidden text-white">
+                <Button variant="ghost" size="icon" className="md:hidden text-white hover:text-primary transition-colors">
                     <Menu className="w-6 h-6" />
                 </Button>
             </div>

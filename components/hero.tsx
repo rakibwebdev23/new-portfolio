@@ -116,19 +116,6 @@ export function Hero() {
                     </div>
                 </div>
             </div>
-
-            {/* Brand Strip */}
-            {/* <div className="w-full border-t border-white/5 bg-background/50 backdrop-blur-sm z-20">
-                <div className="container mx-auto px-6 py-8">
-                    <div className="flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-16 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-                        <h3 className="text-2xl font-serif font-bold text-white">Kagont</h3>
-                        <h3 className="text-2xl font-serif font-bold text-white">katerio</h3>
-                        <h3 className="text-2xl font-serif font-bold text-white">Alregky</h3>
-                        <h3 className="text-2xl font-serif font-bold text-white">Opilgo</h3>
-                        <h3 className="text-2xl font-serif font-bold text-white">Kagont</h3>
-                    </div>
-                </div>
-            </div> */}
         </section>
     )
 }
