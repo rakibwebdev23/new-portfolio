@@ -4,10 +4,12 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, MessageSquare } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 export function Navbar() {
     const [isVisible, setIsVisible] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
+    const pathname = usePathname()
 
     useEffect(() => {
         const controlNavbar = () => {
@@ -31,9 +33,17 @@ export function Navbar() {
         }
     }, [lastScrollY])
 
+    const navLinks = [
+        { label: "Home", href: "/" },
+        { label: "Services", href: "/services" },
+        { label: "Portfolio", href: "/portfolio" },
+        { label: "Blog", href: "/blog" },
+        { label: "Contact", href: "/contact" },
+    ]
+
     return (
         <nav className={cn(
-            "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-transform duration-300 ease-in-out w-[95%] max-w-7xl",
+            "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-transform duration-300 ease-in-out w-full container",
             "bg-black/20 backdrop-blur-md border border-white/10 rounded-lg pt-1 pb-4 shadow-2xl",
             isVisible ? "translate-y-0" : "-translate-y-full"
         )}>
@@ -48,28 +58,25 @@ export function Navbar() {
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                    {[
-                        { label: "Home", href: "#", active: true },
-                        { label: "Services", href: "#services" },
-                        { label: "Portfolio", href: "#portfolio" },
-                        { label: "Blog", href: "#blog" },
-                        { label: "Contact", href: "#contact" },
-                    ].map((link) => (
-                        <a
-                            key={link.label}
-                            href={link.href}
-                            className={cn(
-                                "relative py-2 transition-colors duration-300 group",
-                                link.active ? "text-primary font-bold" : "hover:text-white"
-                            )}
-                        >
-                            {link.label}
-                            <span className={cn(
-                                "absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-300 ease-out origin-left",
-                                link.active ? "w-full" : "w-0 group-hover:w-full"
-                            )} />
-                        </a>
-                    ))}
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href
+                        return (
+                            <a
+                                key={link.label}
+                                href={link.href}
+                                className={cn(
+                                    "relative py-2 transition-colors duration-300 group",
+                                    isActive ? "text-primary font-bold" : "hover:text-white"
+                                )}
+                            >
+                                {link.label}
+                                <span className={cn(
+                                    "absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-300 ease-out origin-left",
+                                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                                )} />
+                            </a>
+                        )
+                    })}
                 </div>
 
                 {/* Right Side */}
@@ -91,3 +98,4 @@ export function Navbar() {
         </nav>
     )
 }
+
