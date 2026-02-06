@@ -2,24 +2,36 @@
 
 import { cn } from "@/lib/utils"
 
+const skills = ["JavaScript", "TypeScript", "Next.js", "React", "Node.js", "Express", "MongoDB", "Tailwind CSS"]
+
 export function BrandStrip() {
     return (
-        <div className="w-full border-t border-white/5 bg-zinc-900/30 backdrop-blur-sm z-20">
-            <div className="container mx-auto px-6 py-12 md:py-16">
-                <div className="flex flex-wrap justify-center md:justify-between items-center gap-12 md:gap-20">
-                    {["Kagont", "katerio", "Afregky", "Opilgo", "Kagont"].map((brand, index) => (
-                        <div key={index} className="flex flex-col items-center gap-2 group">
-                            <h3 className={cn(
-                                "text-3xl md:text-5xl font-serif font-bold transition-all duration-500",
-                                index === 2 ? "text-white opacity-100" : "text-white/20 group-hover:text-white/40"
-                            )}>
-                                {brand}
-                            </h3>
-                            {index === 2 && (
-                                <div className="w-2 h-2 bg-yellow-400 rounded-full shadow-[0_0_10px_rgba(250,204,21,0.5)]"></div>
-                            )}
-                        </div>
-                    ))}
+        <div className="w-full border-t border-white/5 bg-zinc-900/30 backdrop-blur-sm z-20 overflow-hidden">
+            <div className="py-10 md:py-14">
+                {/* Marquee container */}
+                <div className="flex animate-marquee">
+                    {/* First set of skills */}
+                    <div className="flex shrink-0 gap-12 md:gap-20 px-6">
+                        {skills.map((skill, index) => (
+                            <div key={index} className="flex items-center gap-4">
+                                <span className="text-3xl md:text-5xl font-serif font-bold text-white/30 hover:text-white/60 transition-colors duration-300 whitespace-nowrap">
+                                    {skill}
+                                </span>
+                                <span className="w-2 h-2 bg-primary rounded-full"></span>
+                            </div>
+                        ))}
+                    </div>
+                    {/* Duplicate for seamless loop */}
+                    <div className="flex shrink-0 gap-12 md:gap-20 px-6">
+                        {skills.map((skill, index) => (
+                            <div key={`dup-${index}`} className="flex items-center gap-4">
+                                <span className="text-3xl md:text-5xl font-serif font-bold text-white/30 hover:text-white/60 transition-colors duration-300 whitespace-nowrap">
+                                    {skill}
+                                </span>
+                                <span className="w-2 h-2 bg-primary rounded-full"></span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

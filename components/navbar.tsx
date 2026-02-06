@@ -43,11 +43,12 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-transform duration-300 ease-in-out w-full container",
-            "bg-black/20 backdrop-blur-md border border-white/10 rounded-lg pt-1 pb-4 shadow-2xl",
-            isVisible ? "translate-y-0" : "-translate-y-full"
+            "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full container",
+            "bg-black/20 backdrop-blur-md border border-white/10 rounded-lg py-4 shadow-2xl",
+            "transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
+            isVisible ? "translate-y-0 opacity-100" : "-translate-y-[120%] opacity-0"
         )}>
-            <div className="container mx-auto px-6 flex items-center justify-between pt-1">
+            <div className="container mx-auto px-6 flex items-center justify-between">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-bold">
