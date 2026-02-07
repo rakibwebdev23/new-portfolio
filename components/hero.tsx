@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Download } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import gsap from "gsap"
 import Image from "next/image"
 
@@ -11,14 +11,6 @@ export function Hero() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Periodic rotation for the circular text
-            gsap.to(".circular-text", {
-                rotation: 360,
-                duration: 20,
-                repeat: -1,
-                ease: "linear"
-            })
-
             // Entry animations
             const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
 
@@ -27,7 +19,7 @@ export function Hero() {
                 opacity: 0,
                 duration: 1,
                 stagger: 0.15,
-                delay: 0.2
+                delay: 0.3
             })
 
             tl.from(".hero-image", {
@@ -36,98 +28,123 @@ export function Hero() {
                 duration: 1.2
             }, "-=0.8")
 
+            tl.from(".floating-badge", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.2
+            }, "-=0.6")
+
         }, containerRef)
 
         return () => ctx.revert()
     }, [])
 
     return (
-        <section ref={containerRef} className="min-h-screen pt-32 md:pt-0 flex flex-col justify-center relative overflow-hidden bg-background">
-            {/* Decorative Background Elements */}
-            <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+        <section ref={containerRef} className="min-h-screen pt-32 flex flex-col justify-center relative overflow-hidden bg-[#050C1C]">
+            {/* Background Decorative Elements */}
+            {/* Topographic lines pattern */}
+            <div className="absolute inset-0 z-0 opacity-30">
+                <svg className="w-full h-full" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="200" cy="450" rx="400" ry="300" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
+                    <ellipse cx="200" cy="450" rx="350" ry="260" stroke="rgba(255,255,255,0.04)" strokeWidth="1" fill="none" />
+                    <ellipse cx="200" cy="450" rx="300" ry="220" stroke="rgba(255,255,255,0.03)" strokeWidth="1" fill="none" />
+                    <ellipse cx="200" cy="450" rx="250" ry="180" stroke="rgba(255,255,255,0.02)" strokeWidth="1" fill="none" />
+                </svg>
+            </div>
+
+            {/* Blue glow effect */}
+            <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] -z-10"></div>
 
             <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center flex-grow">
                 {/* Left Content */}
                 <div className="space-y-8 relative z-10 pt-10 md:pt-0">
-                    {/* Badge / Circular Text Area */}
-                    <div className="hero-content-item relative w-fit mb-6">
-                        <div className="animate-spin-slow">
-                            <svg className="w-28 h-28 md:w-32 md:h-32 circular-text" viewBox="0 0 100 100" width="100" height="100">
-                                <defs>
-                                    <path id="circle" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />
-                                </defs>
-                                <text fontSize="11">
-                                    <textPath xlinkHref="#circle" className="uppercase font-bold tracking-widest fill-gray-400">
-                                        • MERN Stack Developer • Frontend Developer
-                                    </textPath>
-                                </text>
-                            </svg>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-3xl font-bold text-gray-400 p-4 rounded-full z-10">R</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="hero-content-item space-y-4 relative">
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl tracking-tighter text-primary relative z-10 font-semibold">
-                            MD Rakib <br />
-                            <span className="font-extralight">Hasan</span>
-                        </h1>
-                        {/* Curved Underline */}
-                        <svg className="absolute -bottom-6 left-0 w-64 md:w-80 h-auto text-primary z-0" viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.00026 26.8C80.8003 3.19999 157.6 -3.20001 198.8 9.19999" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    {/* Hello Badge */}
+                    <div className="hero-content-item flex items-center gap-3 mb-6">
+                        {/* Decorative star */}
+                        <svg className="w-6 h-6 text-[#FF5C00]" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="currentColor" />
+                        </svg>
+                        <span className="bg-white text-[#050C1C] px-4 py-1.5 rounded-full text-sm font-medium">
+                            Hello
+                        </span>
+                        {/* Decorative lines */}
+                        <svg className="w-10 h-10 text-[#FF5C00]" viewBox="0 0 40 40" fill="none">
+                            <path d="M20 5L22 15L32 17L22 19L20 29L18 19L8 17L18 15L20 5Z" stroke="currentColor" strokeWidth="1" fill="none" />
                         </svg>
                     </div>
 
-                    <div className="hero-content-item max-w-lg pt-4">
-                        <p className="text-white/80 leading-relaxed text-lg">
-                            Lead MERN Stack Developer based in Dhaka, specializing in building scalable SaaS solutions and high-performance web applications.
+                    {/* Main Heading */}
+                    <div className="hero-content-item space-y-2">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                            Experience the<br />
+                            power of visual<br />
+                            <span className="text-[#FF5C00] relative inline-block">
+                                Strategies
+                                {/* Orange underline */}
+                                <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 200 12" preserveAspectRatio="none">
+                                    <path d="M0 6 Q50 0, 100 6 Q150 12, 200 6" stroke="#FF5C00" strokeWidth="3" fill="none" />
+                                </svg>
+                            </span>
+                        </h1>
+                    </div>
+
+                    {/* Description */}
+                    <div className="hero-content-item max-w-md">
+                        <p className="text-white/70 text-lg leading-relaxed">
+                            Dive into a realm where design meets narrative. Folxo brings to life the potent fusion of creativity and user experience.
                         </p>
                     </div>
 
-                    <div className="hero-content-item pt-6">
-                        <Button variant="outline" size="lg" className="rounded-none border-primary text-primary hover:bg-primary hover:text-black transition-all px-8 h-14 text-base tracking-wider font-semibold group cursor-pointer">
-                            Download CV <Download className="ml-2 h-4 w-4" />
+                    {/* CTA Section */}
+                    <div className="hero-content-item flex flex-wrap items-center gap-6 pt-4">
+                        {/* Hire Me Button */}
+                        <Button
+                            className="bg-[#FF5C00] hover:bg-[#e65400] text-white rounded-full px-8 py-6 text-base font-semibold group transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25"
+                        >
+                            Hire me
+                            <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </Button>
+
+                        {/* Client Avatars */}
+                        <div className="flex items-center gap-4">
+                            <div className="flex -space-x-3">
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-[#050C1C] overflow-hidden relative">
+                                        <Image
+                                            src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                                            alt={`Client ${i}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <p className="text-white font-bold text-lg">10K+</p>
+                                <p className="text-white/60 text-sm">worldwide clients</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 {/* Right Image with Complex Frame */}
                 <div className="hero-image relative flex justify-center md:justify-end mt-10 md:mt-0">
-
-                    {/* Background decorative curved lines on right */}
-                    <svg className="absolute -top-10 -right-32 w-[600px] h-[700px] z-0 pointer-events-none" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M350 50 Q420 150 380 280 Q340 400 400 500" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" fill="none" />
-                        <path d="M380 30 Q450 130 410 260 Q370 380 430 480" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" fill="none" />
-                    </svg>
-
-                    {/* Decorative yellow dots pattern - near center left */}
-                    <div className="absolute top-1/3 -left-8 z-20 grid grid-cols-3 gap-2">
-                        {[...Array(9)].map((_, i) => (
-                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-primary/60"></div>
-                        ))}
-                    </div>
-
-                    {/* Decorative yellow dots pattern - top right */}
-                    <div className="absolute top-8 right-8 z-20 grid grid-cols-4 gap-1.5">
-                        {[...Array(12)].map((_, i) => (
-                            <div key={i} className="w-1 h-1 rounded-full bg-primary/40"></div>
-                        ))}
-                    </div>
-
-                    {/* Decorative star element - bottom left */}
-                    <div className="absolute bottom-32 -left-20 z-30">
-                        <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22.5 0L24.5 20L45 22.5L24.5 25L22.5 45L20.5 25L0 22.5L20.5 20L22.5 0Z" stroke="#ff6b4a" strokeWidth="1.5" fill="none" />
+                    {/* Decorative geometric elements */}
+                    <div className="absolute -top-8 right-1/4 z-30">
+                        <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
+                            <path d="M0 40L15 0L30 40" fill="#FF5C00" />
+                            <path d="M20 40L35 0L50 40" fill="white" />
+                            <path d="M40 40L55 0L60 20" fill="#FF5C00" />
                         </svg>
                     </div>
 
                     {/* Main Image Container with complex frame */}
-                    <div className="relative z-10 w-full max-w-[420px] group cursor-pointer">
+                    <div className="relative z-10 w-full max-w-[420px] group">
 
-                        {/* SVG Frame Outline - matching reference image 2 precisely */}
+                        {/* SVG Frame Outline */}
                         <svg
-                            className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] z-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-0"
+                            className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] z-20 pointer-events-none"
                             viewBox="0 0 454 574"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +180,7 @@ export function Hero() {
                         </svg>
 
                         {/* Clipped Image - matching frame shape */}
-                        <div className="relative aspect-[4/5] overflow-hidden rounded-bl-3xl transition-all duration-500 ease-out group-hover:scale-[1.08]" style={{
+                        <div className="relative aspect-[4/5] overflow-hidden rounded-bl-3xl transition-all duration-500 ease-out" style={{
                             clipPath: `polygon(
                                 7% 0%,
                                 34% 0%,
@@ -192,14 +209,14 @@ export function Hero() {
                         }}>
                             <Image
                                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60"
-                                alt="MD Rakib Hasan"
+                                alt="Designer at work"
                                 fill
                                 className="object-cover"
                             />
                         </div>
 
-                        {/* Profile Card - positioned on left middle */}
-                        <div className="absolute left-0 bottom-[32%] -translate-x-1/3 z-30 bg-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl">
+                        {/* Profile Card - Floating badge */}
+                        <div className="floating-badge absolute left-0 bottom-[35%] -translate-x-1/4 z-30 bg-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl">
                             <div className="w-12 h-12 rounded-lg overflow-hidden relative">
                                 <Image
                                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=60"
@@ -214,8 +231,8 @@ export function Hero() {
                             </div>
                         </div>
 
-                        {/* Secondary Image at bottom left with diagonal cut */}
-                        <div className="absolute -bottom-6 -left-6 w-40 h-32 z-20 overflow-hidden" style={{
+                        {/* Secondary Image at bottom left */}
+                        <div className="floating-badge absolute -bottom-4 -left-4 w-36 h-28 z-20 overflow-hidden rounded-tr-2xl" style={{
                             clipPath: `polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 20%)`
                         }}>
                             <Image
@@ -224,9 +241,16 @@ export function Hero() {
                                 fill
                                 className="object-cover"
                             />
-                            {/* White border overlay - diagonal line */}
-                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 160 128" preserveAspectRatio="none">
-                                <path d="M32 0 L0 32 L0 128 L160 128 L160 0 L32 0" stroke="rgba(255,255,255,0.6)" strokeWidth="2" fill="none" />
+                            {/* White border overlay */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 144 112" preserveAspectRatio="none">
+                                <path d="M29 0 L0 29 L0 112 L144 112 L144 0 L29 0" stroke="rgba(255,255,255,0.6)" strokeWidth="2" fill="none" />
+                            </svg>
+                        </div>
+
+                        {/* Decorative star element */}
+                        <div className="floating-badge absolute bottom-16 right-0 translate-x-1/2 z-30">
+                            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                                <path d="M25 0L27 23L50 25L27 27L25 50L23 27L0 25L23 23L25 0Z" stroke="#FF5C00" strokeWidth="1.5" fill="none" />
                             </svg>
                         </div>
                     </div>

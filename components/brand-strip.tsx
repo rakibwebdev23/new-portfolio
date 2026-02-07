@@ -1,6 +1,5 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 
 const skills = ["JavaScript", "TypeScript", "Next.js", "React", "Node.js", "Express", "MongoDB", "Tailwind CSS"]
 

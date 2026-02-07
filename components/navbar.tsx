@@ -1,22 +1,38 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, MessageSquare } from "lucide-react"
+import { Menu, X, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
+
+interface DropdownItem {
+    label: string
+    href: string
+}
+
+interface NavLink {
+    label: string
+    href: string
+    hasDropdown?: boolean
+    dropdownItems?: DropdownItem[]
+}
 
 export function Navbar() {
     const [isVisible, setIsVisible] = useState(true)
     const [lastScrollY, setLastScrollY] = useState(0)
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const pathname = usePathname()
+    const dropdownRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const controlNavbar = () => {
             if (typeof window !== 'undefined') {
-                if (window.scrollY > lastScrollY && window.scrollY > 80) { // Scrolling down
+                if (window.scrollY > lastScrollY && window.scrollY > 80) {
                     setIsVisible(false)
-                } else { // Scrolling up or at top
+                } else {
                     setIsVisible(true)
                 }
                 setLastScrollY(window.scrollY)
@@ -25,78 +41,212 @@ export function Navbar() {
 
         if (typeof window !== 'undefined') {
             window.addEventListener('scroll', controlNavbar)
-
-            // cleanup function
             return () => {
                 window.removeEventListener('scroll', controlNavbar)
             }
         }
     }, [lastScrollY])
 
-    const navLinks = [
-        { label: "Home", href: "/" },
-        { label: "Services", href: "/services" },
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setActiveDropdown(null)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    const navLinks: NavLink[] = [
+        {
+            label: "Home",
+            href: "/",
+            hasDropdown: true,
+            dropdownItems: [
+                { label: "Home One", href: "/" },
+                { label: "Home Two", href: "/home-two" },
+            ]
+        },
+        { label: "About me", href: "/about" },
         { label: "Portfolio", href: "/portfolio" },
+        {
+            label: "Pages",
+            href: "#",
+            hasDropdown: true,
+            dropdownItems: [
+                { label: "Services", href: "/services" },
+                { label: "Blog", href: "/blog" },
+                { label: "Contact", href: "/contact" },
+            ]
+        },
         { label: "Blog", href: "/blog" },
-        { label: "Contact", href: "/contact" },
     ]
+
+    const toggleDropdown = (label: string) => {
+        setActiveDropdown(activeDropdown === label ? null : label)
+    }
 
     return (
         <nav className={cn(
-            "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full container",
-            "bg-black/20 backdrop-blur-md border border-white/10 rounded-lg py-4 shadow-2xl",
+            "fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl",
+            "bg-white rounded-2xl py-3 px-6 shadow-lg",
             "transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
-            isVisible ? "translate-y-0 opacity-100" : "-translate-y-[120%] opacity-0"
-        )}>
-            <div className="container mx-auto px-6 flex items-center justify-between">
+            isVisible ? "translate-y-0 opacity-100" : "-translate-y-[150%] opacity-0"
+        )} ref={dropdownRef}>
+            <div className="flex items-center justify-between">
                 {/* Logo */}
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-bold">
-                        M
-                    </div>
-                    <span className="text-xl font-bold tracking-tight text-white">MD Rakib</span>
-                </div>
+                <Link href="/" className="flex items-center gap-1">
+                    <span className="text-2xl font-bold text-[#FF5C00]">F</span>
+                    <span className="text-2xl font-bold text-[#050C1C]">olxo</span>
+                </Link>
 
                 {/* Desktop Links */}
-                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+                <div className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => {
                         const isActive = pathname === link.href
+                        const isDropdownOpen = activeDropdown === link.label
+
+                        if (link.hasDropdown) {
+                            return (
+                                <div key={link.label} className="relative">
+                                    <button
+                                        onClick={() => toggleDropdown(link.label)}
+                                        className={cn(
+                                            "flex items-center gap-1 text-sm font-medium transition-colors duration-200",
+                                            isActive ? "text-[#FF5C00]" : "text-gray-700 hover:text-[#FF5C00]"
+                                        )}
+                                    >
+                                        {link.label}
+                                        <ChevronDown className={cn(
+                                            "w-4 h-4 transition-transform duration-200",
+                                            isDropdownOpen && "rotate-180"
+                                        )} />
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    <div className={cn(
+                                        "absolute top-full left-0 mt-4 bg-white rounded-xl shadow-xl py-3 px-2 min-w-[180px]",
+                                        "transition-all duration-300 origin-top",
+                                        isDropdownOpen
+                                            ? "opacity-100 scale-100 visible"
+                                            : "opacity-0 scale-95 invisible"
+                                    )}>
+                                        {link.dropdownItems?.map((item) => (
+                                            <Link
+                                                key={item.label}
+                                                href={item.href}
+                                                className={cn(
+                                                    "block px-4 py-2.5 text-sm rounded-lg transition-colors duration-200",
+                                                    pathname === item.href
+                                                        ? "text-[#FF5C00] bg-orange-50"
+                                                        : "text-gray-700 hover:text-[#FF5C00] hover:bg-orange-50"
+                                                )}
+                                                onClick={() => setActiveDropdown(null)}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            )
+                        }
+
                         return (
-                            <a
+                            <Link
                                 key={link.label}
                                 href={link.href}
                                 className={cn(
-                                    "relative py-2 transition-colors duration-300 group",
-                                    isActive ? "text-primary font-bold" : "hover:text-white"
+                                    "relative text-sm font-medium transition-colors duration-200 group py-2",
+                                    isActive ? "text-[#FF5C00]" : "text-gray-700 hover:text-[#FF5C00]"
                                 )}
                             >
                                 {link.label}
-                                <span className={cn(
-                                    "absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-300 ease-out origin-left",
-                                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                                )} />
-                            </a>
+                            </Link>
                         )
                     })}
                 </div>
 
-                {/* Right Side */}
-                <div className="hidden md:flex items-center gap-6">
-                    <a href="mailto:rh.rakibhasan365@gmail.com" className="text-xs text-zinc-500 hover:text-white transition-colors">
-                        rh.rakibhasan365@gmail.com
-                    </a>
-                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-none px-6 font-bold">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Let's Talk
-                    </Button>
+                {/* Contact Button */}
+                <div className="hidden md:block">
+                    <Link href="/contact">
+                        <Button
+                            variant="outline"
+                            className="border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full px-6 py-2 text-sm font-medium transition-all duration-300"
+                        >
+                            Contact me
+                        </Button>
+                    </Link>
                 </div>
 
                 {/* Mobile Menu Toggle */}
-                <Button variant="ghost" size="icon" className="md:hidden text-white hover:text-primary transition-colors">
-                    <Menu className="w-6 h-6" />
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden text-gray-700 hover:text-[#FF5C00] transition-colors"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                    {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </Button>
+            </div>
+
+            {/* Mobile Menu */}
+            <div className={cn(
+                "md:hidden overflow-hidden transition-all duration-300",
+                mobileMenuOpen ? "max-h-[400px] mt-4 pt-4 border-t border-gray-100" : "max-h-0"
+            )}>
+                <div className="flex flex-col gap-3">
+                    {navLinks.map((link) => (
+                        <div key={link.label}>
+                            {link.hasDropdown ? (
+                                <>
+                                    <button
+                                        onClick={() => toggleDropdown(link.label)}
+                                        className="flex items-center justify-between w-full text-gray-700 hover:text-[#FF5C00] transition-colors text-sm font-medium py-2"
+                                    >
+                                        {link.label}
+                                        <ChevronDown className={cn(
+                                            "w-4 h-4 transition-transform",
+                                            activeDropdown === link.label && "rotate-180"
+                                        )} />
+                                    </button>
+                                    <div className={cn(
+                                        "overflow-hidden transition-all duration-200 pl-4",
+                                        activeDropdown === link.label ? "max-h-[200px]" : "max-h-0"
+                                    )}>
+                                        {link.dropdownItems?.map((item) => (
+                                            <Link
+                                                key={item.label}
+                                                href={item.href}
+                                                className="block text-sm text-gray-600 hover:text-[#FF5C00] py-2"
+                                                onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <Link
+                                    href={link.href}
+                                    className="block text-gray-700 hover:text-[#FF5C00] transition-colors text-sm font-medium py-2"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {link.label}
+                                </Link>
+                            )}
+                        </div>
+                    ))}
+                    <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                        <Button
+                            variant="outline"
+                            className="w-full border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full mt-2"
+                        >
+                            Contact me
+                        </Button>
+                    </Link>
+                </div>
             </div>
         </nav>
     )
 }
-
