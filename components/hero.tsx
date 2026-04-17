@@ -1,118 +1,227 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, ArrowUp, Star, Lightbulb } from "lucide-react"
 import gsap from "gsap"
 import Image from "next/image"
+import { useGSAP } from "@gsap/react"
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null)
+    const cyclingWordRef = useRef<HTMLSpanElement>(null)
+    const [currentWordIndex, setCurrentWordIndex] = useState(0)
+    const words = ["Stories", "Concepts", "Designs"]
 
-    useEffect(() => {
+    useGSAP(() => {
         const ctx = gsap.context(() => {
-            // Entry animations
-            const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+            // Entry animations for text
+            const tl = gsap.timeline({ defaults: { ease: "power4.out" } })
 
-            tl.from(".hero-content-item", {
-                y: 50,
+            tl.from(".hero-split-text", {
+                y: 100,
                 opacity: 0,
-                duration: 1,
-                stagger: 0.15,
-                delay: 0.3
+                duration: 1.2,
+                stagger: 0.1,
+                delay: 0.2
             })
 
-            tl.from(".hero-image", {
-                scale: 0.9,
+            tl.from(".hero-reveal-item", {
+                y: 30,
                 opacity: 0,
-                duration: 1.2
+                duration: 0.8,
+                stagger: 0.1
             }, "-=0.8")
 
-            tl.from(".floating-badge", {
-                scale: 0.8,
+            tl.from(".hero-image-container", {
+                scale: 0.95,
                 opacity: 0,
-                duration: 0.6,
+                duration: 1.5,
+                ease: "expo.out"
+            }, "-=1")
+
+            tl.from(".floating-card", {
+                x: 40,
+                opacity: 0,
+                duration: 1,
                 stagger: 0.2
-            }, "-=0.6")
+            }, "-=0.5")
+
+            // Floating animations
+            gsap.to(".float-element", {
+                y: -20,
+                duration: 3,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    each: 0.7,
+                    from: "random"
+                }
+            })
+
+            // Topographic lines drawing animation
+            gsap.to(".topo-line", {
+                strokeDashoffset: 0,
+                duration: 4,
+                stagger: 0.3,
+                ease: "power2.inOut"
+            })
+
+            // Word cycling animation
+            const wordCycle = () => {
+                const tlWord = gsap.timeline({
+                    onComplete: () => {
+                        setCurrentWordIndex((prev) => (prev + 1) % words.length)
+                        gsap.delayedCall(2, wordCycle)
+                    }
+                })
+
+                tlWord.to(cyclingWordRef.current, {
+                    y: -30,
+                    opacity: 0,
+                    duration: 0.6,
+                    ease: "power3.in"
+                })
+                tlWord.set(cyclingWordRef.current, { y: 30 })
+                tlWord.to(cyclingWordRef.current, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: "power3.out"
+                })
+            }
+
+            gsap.delayedCall(3, wordCycle)
+
+            // Mouse parallax effect
+            const handleMouseMove = (e: MouseEvent) => {
+                const { clientX, clientY } = e
+                const xPos = (clientX / window.innerWidth - 0.5) * 30
+                const yPos = (clientY / window.innerHeight - 0.5) * 30
+
+                gsap.to(".parallax-bg", {
+                    x: xPos,
+                    y: yPos,
+                    duration: 1.2,
+                    ease: "power2.out"
+                })
+            }
+
+            window.addEventListener("mousemove", handleMouseMove)
+            return () => window.removeEventListener("mousemove", handleMouseMove)
 
         }, containerRef)
 
         return () => ctx.revert()
-    }, [])
+    }, { scope: containerRef })
 
     return (
-        <section ref={containerRef} className="min-h-screen pt-32 flex flex-col justify-center relative overflow-hidden bg-[#050C1C]">
-            {/* Background Decorative Elements */}
-            {/* Topographic lines pattern */}
-            <div className="absolute inset-0 z-0 opacity-30">
-                <svg className="w-full h-full" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="200" cy="450" rx="400" ry="300" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
-                    <ellipse cx="200" cy="450" rx="350" ry="260" stroke="rgba(255,255,255,0.04)" strokeWidth="1" fill="none" />
-                    <ellipse cx="200" cy="450" rx="300" ry="220" stroke="rgba(255,255,255,0.03)" strokeWidth="1" fill="none" />
-                    <ellipse cx="200" cy="450" rx="250" ry="180" stroke="rgba(255,255,255,0.02)" strokeWidth="1" fill="none" />
+        <section ref={containerRef} className="min-h-screen pt-32 pb-20 flex flex-col justify-center relative overflow-hidden bg-[#050C1C]">
+            {/* Authentic Topographic Background */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                {/* Left Vibrant Orange Topo Lines */}
+                <svg className="absolute top-0 left-0 w-full h-full opacity-35 parallax-bg" viewBox="0 0 1440 900" fill="none">
+                    <path className="topo-line" d="M0 200C150 160 350 320 550 240C750 160 1000 380 1440 280" stroke="#FF5C00" strokeWidth="1.5" strokeOpacity="0.5" strokeDasharray="1800" strokeDashoffset="1800" />
+                    <path className="topo-line" d="M0 400C250 350 450 520 650 430C850 340 1100 580 1440 480" stroke="#FF5C00" strokeWidth="1.5" strokeOpacity="0.4" strokeDasharray="1800" strokeDashoffset="1800" />
+                    <path className="topo-line" d="M0 600C350 550 550 720 750 640C950 560 1200 820 1440 700" stroke="#FF5C00" strokeWidth="1.5" strokeOpacity="0.3" strokeDasharray="1800" strokeDashoffset="1800" />
                 </svg>
+
+                {/* Top Right Concentric Circles (Radiating from corner) */}
+                <svg className="absolute -top-40 -right-40 w-[800px] h-[800px] opacity-15" viewBox="0 0 800 800">
+                    {[100, 160, 220, 280, 340, 400].map((r) => (
+                        <circle key={r} cx="800" cy="0" r={r * 1.5} stroke="white" strokeWidth="1" fill="none" />
+                    ))}
+                </svg>
+
+                {/* Chunkier Center Top Triangle Logo */}
+                <div className="absolute top-32 left-1/2 -translate-x-1/2 flex gap-2 opacity-100 z-20">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <svg key={i} width="24" height="16" viewBox="0 0 24 16">
+                            <path d="M0 16L12 0L24 16H0Z" fill={i % 2 === 0 ? "#FF5C00" : "white"} />
+                        </svg>
+                    ))}
+                </div>
+
+                {/* Geometric Accents */}
+                <div className="absolute top-[30%] right-[15%] float-element opacity-30">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 0L24 16L40 20L24 24L20 40L16 24L0 20L16 16L20 0Z" fill="#FF5C00" />
+                    </svg>
+                </div>
+                <div className="absolute bottom-[25%] left-[10%] float-element opacity-15">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                        <path d="M30 0L60 60H0L30 0Z" stroke="white" strokeWidth="1" fill="none" />
+                    </svg>
+                </div>
             </div>
 
-            {/* Blue glow effect */}
-            <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] -z-10"></div>
+            {/* Aesthetic Glows */}
+            <div className="absolute top-1/2 left-1/3 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] -z-10 animate-pulse-slow"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-orange-600/15 rounded-full blur-[120px] -z-10"></div>
 
-            <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center flex-grow">
+            <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center flex-grow relative z-10">
                 {/* Left Content */}
-                <div className="space-y-8 relative z-10 pt-10 md:pt-0">
-                    {/* Hello Badge */}
-                    <div className="hero-content-item flex items-center gap-3 mb-6">
-                        {/* Decorative star */}
-                        <svg className="w-6 h-6 text-[#FF5C00]" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="currentColor" />
-                        </svg>
-                        <span className="bg-white text-[#050C1C] px-4 py-1.5 rounded-full text-sm font-medium">
+                <div className="space-y-8">
+                    {/* Hello Badge with CURVED Scribbles */}
+                    <div className="relative inline-block hero-reveal-item group">
+                        {/* Left Scribbles (Hand-drawn Curved Arcs) */}
+                        <div className="absolute -top-7 -left-10 flex gap-2 -rotate-15">
+                            {[1, 2, 3].map((i) => (
+                                <svg key={i} width="16" height="16" viewBox="0 0 20 20">
+                                    <path d="M2 18 C5 5, 15 5, 18 18" stroke="#FF5C00" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                                </svg>
+                            ))}
+                        </div>
+                        {/* Right Scribbles (Hand-drawn Curved Arcs) */}
+                        <div className="absolute -top-7 -right-10 flex gap-2 rotate-15">
+                            {[1, 2, 3].map((i) => (
+                                <svg key={i} width="16" height="16" viewBox="0 0 20 20">
+                                    <path d="M2 18 C5 5, 15 5, 18 18" stroke="#FF5C00" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                                </svg>
+                            ))}
+                        </div>
+                        <span className="bg-white text-[#050C1C] px-8 py-2.5 rounded-full text-lg font-bold shadow-2xl inline-block transition-transform hover:scale-105">
                             Hello
                         </span>
-                        {/* Decorative lines */}
-                        <svg className="w-10 h-10 text-[#FF5C00]" viewBox="0 0 40 40" fill="none">
-                            <path d="M20 5L22 15L32 17L22 19L20 29L18 19L8 17L18 15L20 5Z" stroke="currentColor" strokeWidth="1" fill="none" />
-                        </svg>
                     </div>
 
                     {/* Main Heading */}
-                    <div className="hero-content-item space-y-2">
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-                            Experience the<br />
-                            power of visual<br />
-                            <span className="text-[#FF5C00] relative inline-block">
-                                Strategies
-                                {/* Orange underline */}
-                                <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 200 12" preserveAspectRatio="none">
-                                    <path d="M0 6 Q50 0, 100 6 Q150 12, 200 6" stroke="#FF5C00" strokeWidth="3" fill="none" />
-                                </svg>
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05]">
+                        <div className="hero-split-text overflow-hidden h-[1.1em]">Experience the</div>
+                        <div className="hero-split-text overflow-hidden h-[1.1em]">power of visual</div>
+                        <div className="hero-split-text overflow-hidden text-[#FF5C00] relative min-h-[1.1em]">
+                            <span ref={cyclingWordRef} className="inline-block relative">
+                                {words[currentWordIndex]}
                             </span>
-                        </h1>
-                    </div>
+                            {/* Hand-drawn DOUBLE Wave Underline */}
+                            <svg className="absolute -bottom-5 left-0 w-full h-8 opacity-100" viewBox="0 0 400 30" preserveAspectRatio="none">
+                                <path d="M0 10 Q100 0, 200 10 Q300 20, 400 10" stroke="#FF5C00" strokeWidth="4" fill="none" strokeLinecap="round" />
+                                <path d="M0 18 Q100 8, 200 18 Q300 28, 400 18" stroke="#FF5C00" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.8" />
+                            </svg>
+                        </div>
+                    </h1>
 
                     {/* Description */}
-                    <div className="hero-content-item max-w-md">
-                        <p className="text-white/70 text-lg leading-relaxed">
-                            Dive into a realm where design meets narrative. Folxo brings to life the potent fusion of creativity and user experience.
-                        </p>
-                    </div>
+                    <p className="hero-reveal-item text-white/70 text-lg md:text-xl leading-relaxed max-w-lg">
+                        Dive into a realm where design meets narrative. Folxo brings to life the potent fusion of creativity and user experience.
+                    </p>
 
-                    {/* CTA Section */}
-                    <div className="hero-content-item flex flex-wrap items-center gap-6 pt-4">
-                        {/* Hire Me Button */}
+                    {/* CTA & Clients */}
+                    <div className="hero-reveal-item flex flex-wrap items-center gap-10 pt-4">
                         <Button
-                            className="bg-[#FF5C00] hover:bg-[#e65400] text-white rounded-full px-8 py-6 text-base font-semibold group transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25"
+                            className="bg-[#FF5C00] hover:bg-[#e65400] text-white rounded-full px-12 py-8 text-xl font-bold group transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl shadow-orange-500/30"
                         >
                             Hire me
-                            <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                         </Button>
 
-                        {/* Client Avatars */}
                         <div className="flex items-center gap-4">
                             <div className="flex -space-x-3">
                                 {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-[#050C1C] overflow-hidden relative">
+                                    <div key={i} className="w-12 h-12 rounded-full border-2 border-[#050C1C] overflow-hidden relative transition-transform hover:scale-110 hover:z-20">
                                         <Image
-                                            src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                                            src={`https://i.pravatar.cc/100?img=${i + 15}`}
                                             alt={`Client ${i}`}
                                             fill
                                             className="object-cover"
@@ -121,140 +230,80 @@ export function Hero() {
                                 ))}
                             </div>
                             <div>
-                                <p className="text-white font-bold text-lg">10K+</p>
-                                <p className="text-white/60 text-sm">worldwide clients</p>
+                                <p className="text-white font-black text-xl leading-none">10K+ worldwide</p>
+                                <p className="text-white font-black text-xl leading-none mt-1">clients</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Right Image with Complex Frame */}
-                <div className="hero-image relative flex justify-center md:justify-end mt-10 md:mt-0">
-                    {/* Decorative geometric elements */}
-                    <div className="absolute -top-8 right-1/4 z-30">
-                        <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
-                            <path d="M0 40L15 0L30 40" fill="#FF5C00" />
-                            <path d="M20 40L35 0L50 40" fill="white" />
-                            <path d="M40 40L55 0L60 20" fill="#FF5C00" />
+                {/* Right Image Content with Perfect Frame */}
+                <div className="hero-image-container relative flex justify-center md:justify-end">
+                    {/* Background Sparkle Decoration */}
+                    <div className="absolute -bottom-10 right-[40%] z-0 float-element">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <path d="M20 0L22 18L40 20L22 22L20 40L18 22L0 20L18 18L20 0Z" stroke="#FF5C00" strokeWidth="1" fill="none" />
                         </svg>
                     </div>
 
-                    {/* Main Image Container with complex frame */}
-                    <div className="relative z-10 w-full max-w-[420px] group">
-
-                        {/* SVG Frame Outline */}
-                        <svg
-                            className="absolute -inset-4 w-[calc(100%+32px)] h-[calc(100%+32px)] z-20 pointer-events-none"
-                            viewBox="0 0 454 574"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            preserveAspectRatio="none"
-                        >
-                            <path d="
-                                M 30 2
-                                L 155 2
-                                L 155 35
-                                L 190 35
-                                L 190 2
-                                L 300 2
-                                Q 310 2 310 12
-                                L 310 45
-                                L 345 45
-                                L 345 2
-                                L 452 2
-                                L 452 380
-                                Q 452 395 437 395
-                                L 400 395
-                                L 400 430
-                                Q 400 440 390 440
-                                L 370 440
-                                L 370 395
-                                L 320 395
-                                L 320 572
-                                L 30 572
-                                Q 2 572 2 542
-                                L 2 32
-                                Q 2 2 30 2
-                                Z
-                            " stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
+                    {/* Main Frame Wrapper */}
+                    <div className="relative z-10 w-full max-w-[480px] group">
+                        {/* Perfect Solid Notched SVG Frame */}
+                        <svg className="absolute -inset-6 w-[calc(100%+48px)] h-[calc(100%+48px)] z-20 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" viewBox="0 0 520 640" fill="none">
+                            <path d="M50 2H220M300 2H480C495 2 518 25 518 50V420L460 420V600C460 625 435 638 410 638H50C25 638 2 615 2 590V50C2 25 25 2 50 2Z" stroke="white" strokeWidth="2.5" />
+                            <circle cx="220" cy="2" r="4" fill="white" />
+                            <circle cx="300" cy="2" r="4" fill="white" />
                         </svg>
 
-                        {/* Clipped Image - matching frame shape */}
-                        <div className="relative aspect-[4/5] overflow-hidden rounded-bl-3xl transition-all duration-500 ease-out" style={{
-                            clipPath: `polygon(
-                                7% 0%,
-                                34% 0%,
-                                34% 6%,
-                                42% 6%,
-                                42% 0%,
-                                66% 0%,
-                                68% 2%,
-                                68% 8%,
-                                76% 8%,
-                                76% 0%,
-                                100% 0%,
-                                100% 68%,
-                                96% 69%,
-                                88% 69%,
-                                88% 76%,
-                                81.5% 77%,
-                                81.5% 69%,
-                                70% 69%,
-                                70% 100%,
-                                7% 100%,
-                                0% 94%,
-                                0% 6%,
-                                7% 0%
-                            )`
+                        {/* Image Container with precise Notched Clip Path */}
+                        <div className="relative aspect-[4/5] w-full overflow-hidden shadow-2xl" style={{
+                            clipPath: `polygon(12% 0%, 35% 0%, 35% 4%, 43% 4%, 43% 0%, 65% 0%, 100% 0%, 100% 68%, 88% 68%, 88% 76%, 80% 76%, 80% 68%, 68% 68%, 68% 100%, 0% 100%, 0% 12%)`
                         }}>
                             <Image
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60"
-                                alt="Designer at work"
+                                src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop"
+                                alt="Robert Fox"
                                 fill
-                                className="object-cover"
+                                className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-in-out"
                             />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050C1C]/30 to-transparent"></div>
                         </div>
 
-                        {/* Profile Card - Floating badge */}
-                        <div className="floating-badge absolute left-0 bottom-[35%] -translate-x-1/4 z-30 bg-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl">
-                            <div className="w-12 h-12 rounded-lg overflow-hidden relative">
+                        {/* Robert Fox Identity Card */}
+                        <div className="floating-card float-element absolute -left-16 bottom-[35%] bg-white rounded-2xl p-4 shadow-2xl flex items-center gap-4 z-30 min-w-[210px] border border-gray-100">
+                            <div className="w-12 h-12 rounded-xl overflow-hidden relative shadow-inner">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=60"
-                                    alt="Profile"
+                                    src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop"
+                                    alt="Robert Fox avatar"
                                     fill
                                     className="object-cover"
                                 />
                             </div>
                             <div>
-                                <h4 className="font-semibold text-gray-900 text-base">Robert Fox</h4>
-                                <p className="text-gray-500 text-sm">UX/UI Designer</p>
+                                <h4 className="font-extrabold text-[#050C1C] text-lg leading-none">Robert Fox</h4>
+                                <p className="text-gray-400 font-bold text-[10px] uppercase tracking-widest mt-1.5">UX/UI Designer</p>
                             </div>
                         </div>
 
-                        {/* Secondary Image at bottom left */}
-                        <div className="floating-badge absolute -bottom-4 -left-4 w-36 h-28 z-20 overflow-hidden rounded-tr-2xl" style={{
-                            clipPath: `polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 20%)`
+                        {/* Secondary Sketch Image - Precise 45-degree Notch */}
+                        <div className="floating-card float-element absolute -bottom-10 -left-10 w-44 h-36 z-20 overflow-hidden shadow-2xl border-2 border-white/20" style={{
+                            clipPath: `polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 22%)`
                         }}>
                             <Image
-                                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&auto=format&fit=crop&q=60"
-                                alt="Working"
+                                src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=2071&auto=format&fit=crop"
+                                alt="Design Sketch"
                                 fill
                                 className="object-cover"
                             />
-                            {/* White border overlay */}
-                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 144 112" preserveAspectRatio="none">
-                                <path d="M29 0 L0 29 L0 112 L144 112 L144 0 L29 0" stroke="rgba(255,255,255,0.6)" strokeWidth="2" fill="none" />
-                            </svg>
-                        </div>
-
-                        {/* Decorative star element */}
-                        <div className="floating-badge absolute bottom-16 right-0 translate-x-1/2 z-30">
-                            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
-                                <path d="M25 0L27 23L50 25L27 27L25 50L23 27L0 25L23 23L25 0Z" stroke="#FF5C00" strokeWidth="1.5" fill="none" />
-                            </svg>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Bottom Right Scroll Button */}
+            <div className="absolute bottom-10 right-10 z-50">
+                <Button className="w-14 h-14 bg-[#FF5C00] hover:bg-[#e65400] p-0 rounded-lg shadow-2xl transition-transform hover:-translate-y-2">
+                    <ArrowUp className="h-7 w-7 text-white" />
+                </Button>
             </div>
         </section>
     )
