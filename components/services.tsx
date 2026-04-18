@@ -25,25 +25,25 @@ const services: Service[] = [
     {
         number: "02",
         title: "Web design",
-        description: "Captivate your audience with stunning digital presence with the best practices.",
+        description: "Transform your online presence with thoughtfully designed websites.",
         image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "03",
         title: "Prototyping",
-        description: "Through meticulous prototyping, I provide a tangible preview of your project.",
+        description: "Through meticulous prototyping, I provide a tangible preview of your project",
         image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "04",
         title: "Branding design",
-        description: "Whether you are building a new brand or revitalizing an existing one.",
+        description: "Whether you're establishing a new brand or revamping an existing one",
         image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "05",
         title: "App design",
-        description: "I will create an intuitive mobile app to streamline your business.",
+        description: "I will create an intuitive mobile app to streamline your business operations",
         image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&auto=format&fit=crop&q=60"
     }
 ]
@@ -56,7 +56,6 @@ export function Services() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate section header on scroll
             gsap.from(".services-header", {
                 scrollTrigger: {
                     trigger: sectionRef.current,
@@ -69,7 +68,6 @@ export function Services() {
                 ease: "power3.out"
             })
 
-            // Animate service rows on scroll
             gsap.from(".service-row", {
                 scrollTrigger: {
                     trigger: containerRef.current,
@@ -99,21 +97,21 @@ export function Services() {
 
     return (
         <section ref={sectionRef} className="py-24 bg-[#050C1C] relative overflow-hidden">
-            {/* Background topographic lines */}
-            <div className="absolute right-0 top-0 w-1/2 h-full opacity-20">
-                <svg className="w-full h-full" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="500" cy="400" rx="400" ry="350" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
-                    <ellipse cx="500" cy="400" rx="340" ry="300" stroke="rgba(255,255,255,0.04)" strokeWidth="1" fill="none" />
-                    <ellipse cx="500" cy="400" rx="280" ry="250" stroke="rgba(255,255,255,0.03)" strokeWidth="1" fill="none" />
+            {/* Background topographic concentric arcs - right side */}
+            <div className="absolute right-0 top-0 w-[500px] h-full opacity-25 pointer-events-none">
+                <svg className="w-full h-full" viewBox="0 0 500 800" fill="none">
+                    {[100, 160, 220, 280, 340, 400, 460].map((r) => (
+                        <circle key={r} cx="500" cy="400" r={r} stroke="rgba(255,255,255,0.12)" strokeWidth="1" fill="none" />
+                    ))}
                 </svg>
             </div>
 
             <div className="container mx-auto px-6">
-                {/* Section Header */}
+                {/* Section Header — 2-column */}
                 <div className="services-header grid md:grid-cols-2 gap-8 mb-16">
                     <div>
-                        <span className="text-[#FF5C00] text-sm font-medium flex items-center gap-2 mb-4">
-                            <span className="w-6 h-[2px] bg-[#FF5C00]"></span>
+                        <span className="text-[#FF5C00] text-sm font-semibold flex items-center gap-3 mb-5">
+                            <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
                             My services
                         </span>
                         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
@@ -122,8 +120,10 @@ export function Services() {
                         </h2>
                     </div>
                     <div className="flex items-end">
-                        <p className="text-white/60 text-lg max-w-md">
-                            Welcome to the heart of innovation, where design meets purpose. At Folxo, I offer a range of specialized services crafted to enhance your digital presence and elevate your brand.
+                        <p className="text-white/60 text-base max-w-md leading-relaxed">
+                            Welcome to the heart of innovation, where design meets purpose.
+                            At Folxo, I offer a range of specialized services crafted to enhance
+                            your digital presence and elevate your brand.
                         </p>
                     </div>
                 </div>
@@ -135,18 +135,17 @@ export function Services() {
                     onMouseMove={handleMouseMove}
                     onMouseLeave={() => setHoveredIndex(null)}
                 >
-                    {/* Floating Image - appears on hover */}
+                    {/* Floating image on hover */}
                     <div
                         className="absolute pointer-events-none z-20 transition-opacity duration-300"
                         style={{
                             left: mousePosition.x - 150,
                             top: mousePosition.y - 120,
                             opacity: hoveredIndex !== null ? 1 : 0,
-                            transform: `translate(0, 0) rotate(-5deg)`,
                         }}
                     >
                         {hoveredIndex !== null && (
-                            <div className="w-[300px] h-[240px] rounded-2xl overflow-hidden shadow-2xl">
+                            <div className="w-[300px] h-[240px] rounded-2xl overflow-hidden shadow-2xl" style={{ transform: "rotate(-5deg)" }}>
                                 <Image
                                     src={services[hoveredIndex].image}
                                     alt={services[hoveredIndex].title}
@@ -164,41 +163,37 @@ export function Services() {
                             onMouseEnter={() => setHoveredIndex(index)}
                         >
                             <div className={`
-                                border-t border-white/10 py-8 
-                                transition-all duration-300 
-                                ${hoveredIndex === index ? 'bg-white/5' : ''}
+                                border-t border-white/10 py-8 px-4
+                                transition-all duration-300
+                                ${hoveredIndex === index ? 'bg-white/5 rounded-xl' : ''}
                             `}>
                                 <div className="flex items-center justify-between">
-                                    {/* Left: Number and Title */}
+                                    {/* Number + Title */}
                                     <div className="flex items-center gap-8">
-                                        <span className="text-white/30 text-xl font-medium w-12">
+                                        <span className="text-white/30 text-xl font-medium w-12 shrink-0">
                                             {service.number}.
                                         </span>
-                                        <h3 className={`
-                                            text-2xl md:text-3xl font-bold transition-colors duration-300
-                                            ${hoveredIndex === index ? 'text-white' : 'text-white'}
-                                        `}>
+                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white">
                                             <span className="relative">
                                                 {service.title}
-                                                {/* Orange underline on hover */}
                                                 <span className={`
-                                                    absolute -bottom-1 left-0 h-0.5 bg-[#FF5C00] transition-all duration-300
+                                                    absolute -bottom-1 left-0 h-[2px] bg-[#FF5C00] transition-all duration-300
                                                     ${hoveredIndex === index ? 'w-full' : 'w-0'}
                                                 `}></span>
                                             </span>
                                         </h3>
                                     </div>
 
-                                    {/* Right: Description and Arrow */}
+                                    {/* Description + Arrow */}
                                     <div className="hidden md:flex items-center gap-8">
-                                        <p className="text-white/50 max-w-xs text-sm">
+                                        <p className="text-white/50 max-w-xs text-sm leading-relaxed">
                                             {service.description}
                                         </p>
                                         <button className={`
-                                            w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300
+                                            w-14 h-14 rounded-full flex items-center justify-center border-2 shrink-0 transition-all duration-300
                                             ${hoveredIndex === index
                                                 ? 'bg-[#FF5C00] border-[#FF5C00] text-white'
-                                                : 'border-white/20 text-white hover:border-white/40'}
+                                                : 'border-white/20 text-white hover:border-white/50'}
                                         `}>
                                             <ArrowUpRight className="w-5 h-5" />
                                         </button>
@@ -208,7 +203,7 @@ export function Services() {
                         </div>
                     ))}
 
-                    {/* Bottom border */}
+                    {/* Bottom divider */}
                     <div className="border-t border-white/10"></div>
                 </div>
             </div>

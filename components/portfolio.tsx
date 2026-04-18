@@ -13,51 +13,58 @@ interface Project {
     category: string
     image: string
     tags: string[]
+    highlighted?: boolean
 }
 
 const projects: Project[] = [
     {
         title: "Ecommerce app design",
         category: "Mobile App",
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "Mobile App"]
+        image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "Mobile App"],
+        highlighted: true
     },
     {
         title: "Travel website design",
         category: "UI/UX Design",
-        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "UI/UX Design", "Web design"]
+        image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "UI/UX Design"],
+        highlighted: false
     },
     {
         title: "Agency website design",
         category: "UI/UX Design",
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "UI/UX Design", "Web design"]
+        image: "https://images.unsplash.com/photo-1497215842964-222b430dc094?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "UI/UX Design"],
+        highlighted: false
     },
     {
         title: "Aiko brand identity design",
         category: "Branding Design",
-        image: "https://images.unsplash.com/photo-1634942536846-e9863ef57f42?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "Branding design"]
+        image: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "Branding Design"],
+        highlighted: true
     },
     {
         title: "Smart watch app design",
         category: "Mobile App",
-        image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "Mobile App"]
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "Mobile App"],
+        highlighted: false
     },
     {
         title: "Mikoto brand identity design",
         category: "Branding Design",
-        image: "https://images.unsplash.com/photo-1636114670789-8c2d4661f25c?w=600&auto=format&fit=crop&q=60",
-        tags: ["All project", "Branding design"]
+        image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=600&auto=format&fit=crop&q=80",
+        tags: ["All", "Branding Design"],
+        highlighted: false
     }
 ]
 
-const filterTags = ["All project", "Branding design", "UI/UX Design", "Web design", "Mobile App"]
+const filterTags = ["All", "Branding Design", "UI/UX Design", "Mobile App"]
 
 export function Portfolio() {
-    const [activeFilter, setActiveFilter] = useState("All project")
+    const [activeFilter, setActiveFilter] = useState("All")
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
     const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -92,22 +99,22 @@ export function Portfolio() {
         return () => ctx.revert()
     }, [])
 
-    const filteredProjects = activeFilter === "All project"
+    const filteredProjects = activeFilter === "All"
         ? projects
         : projects.filter(p => p.tags.includes(activeFilter))
 
     return (
-        <section ref={sectionRef} className="py-24 bg-white">
+        <section ref={sectionRef} className="py-24 bg-[#f5f5f5]">
             <div className="container mx-auto px-6">
                 {/* Section Header */}
                 <div className="portfolio-header mb-12">
-                    <span className="text-[#FF5C00] text-sm font-medium flex items-center gap-2 mb-4">
-                        <span className="w-6 h-[2px] bg-[#FF5C00]"></span>
-                        My portfolio
+                    <span className="text-[#FF5C00] text-sm font-semibold flex items-center gap-3 mb-5">
+                        <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
+                        Portfolio
                     </span>
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#050C1C] leading-tight">
-                            Let's have a look at my<br />
+                            Let&apos;s have a look at my<br />
                             latest projects
                         </h2>
 
@@ -118,10 +125,10 @@ export function Portfolio() {
                                     key={tag}
                                     onClick={() => setActiveFilter(tag)}
                                     className={`
-                                        px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300
+                                        px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-300
                                         ${activeFilter === tag
-                                            ? 'bg-[#FF5C00] text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                                            ? 'bg-[#050C1C] text-white border-[#050C1C]'
+                                            : 'bg-transparent text-[#050C1C] border-[#050C1C] hover:bg-[#050C1C] hover:text-white'}
                                     `}
                                 >
                                     {tag}
@@ -135,7 +142,7 @@ export function Portfolio() {
                 <div className="portfolio-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredProjects.map((project, index) => (
                         <div
-                            key={index}
+                            key={`${project.title}-${index}`}
                             className="portfolio-card group cursor-pointer"
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
@@ -149,7 +156,7 @@ export function Portfolio() {
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
 
-                                {/* Orange Circle Overlay on Hover */}
+                                {/* Orange circle on hover */}
                                 <div className={`
                                     absolute inset-0 flex items-center justify-center
                                     transition-all duration-300
@@ -158,9 +165,7 @@ export function Portfolio() {
                                     <div className={`
                                         w-16 h-16 rounded-full bg-[#FF5C00] flex items-center justify-center
                                         transition-all duration-300
-                                        ${hoveredIndex === index
-                                            ? 'opacity-100 scale-100'
-                                            : 'opacity-0 scale-75'}
+                                        ${hoveredIndex === index ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}
                                     `}>
                                         <ArrowUpRight className="w-6 h-6 text-white" />
                                     </div>
@@ -172,7 +177,7 @@ export function Portfolio() {
                                 <div>
                                     <h3 className={`
                                         text-xl font-bold transition-colors duration-300
-                                        ${hoveredIndex === index ? 'text-[#FF5C00]' : 'text-[#050C1C]'}
+                                        ${(hoveredIndex === index || project.highlighted) ? 'text-[#FF5C00]' : 'text-[#050C1C]'}
                                     `}>
                                         {project.title}
                                     </h3>
@@ -181,7 +186,7 @@ export function Portfolio() {
                                     </p>
                                 </div>
                                 <button className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300
+                                    w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 shrink-0
                                     ${hoveredIndex === index
                                         ? 'border-[#FF5C00] text-[#FF5C00]'
                                         : 'border-gray-300 text-gray-400'}
