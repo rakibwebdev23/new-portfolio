@@ -1,5 +1,7 @@
 "use client"
 
+import CommonWrapper from "./CommonWrapper"
+
 const brands = [
     {
         name: "Strequry",
@@ -63,19 +65,21 @@ export function BrandStrip() {
 
     return (
         <div className="w-full bg-white border-t border-gray-100 border-b overflow-hidden py-10">
-            <p className="text-center text-[#050C1C] font-semibold text-base mb-8">
-                Trusted by <span className="text-[#FF5C00] font-bold">1000+</span> companies around the world
-            </p>
-            <div className="relative">
-                <div className="flex animate-marquee">
-                    {doubled.map((brand, i) => (
-                        <div key={i} className="flex items-center gap-3 shrink-0 px-10">
-                            {brand.logo}
-                            <span className="text-[#050C1C] text-xl font-bold whitespace-nowrap">{brand.name}</span>
-                        </div>
-                    ))}
+            <CommonWrapper>
+                <p className="text-center text-[#050C1C] font-semibold text-base mb-8">
+                    Trusted by <span className="text-[#FF5C00] font-bold">1000+</span> companies around the world
+                </p>
+                <div className="relative">
+                    <div className="flex animate-marquee">
+                        {doubled.map((brand, i) => (
+                            <div key={i} className="flex items-center gap-3 shrink-0 px-10">
+                                {brand.logo}
+                                <span className="text-[#050C1C] text-xl font-bold whitespace-nowrap">{brand.name}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </CommonWrapper>
         </div>
     )
 }

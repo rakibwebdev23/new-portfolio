@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import CommonWrapper from "./CommonWrapper"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,7 +106,7 @@ export function Portfolio() {
 
     return (
         <section ref={sectionRef} className="py-24 bg-[#f5f5f5]">
-            <div className="container mx-auto px-6">
+            <CommonWrapper>
                 {/* Section Header */}
                 <div className="portfolio-header mb-12">
                     <span className="text-[#FF5C00] text-sm font-semibold flex items-center gap-3 mb-5">
@@ -185,19 +186,19 @@ export function Portfolio() {
                                         {project.category}
                                     </p>
                                 </div>
-                                <button className={`
+                                <div className={`
                                     w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 shrink-0
                                     ${hoveredIndex === index
                                         ? 'border-[#FF5C00] text-[#FF5C00]'
                                         : 'border-gray-300 text-gray-400'}
                                 `}>
                                     <ArrowUpRight className="w-4 h-4" />
-                                </button>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            </CommonWrapper>
         </section>
     )
 }

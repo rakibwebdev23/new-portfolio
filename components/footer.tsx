@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import CommonWrapper from "./CommonWrapper"
 
 const quickLinks = [
     { label: "About me", href: "/about" },
@@ -65,7 +66,7 @@ const socialIcons = [
 export function Footer() {
     return (
         <footer className="bg-[#050C1C] pt-20 pb-0">
-            <div className="container mx-auto px-6">
+            <CommonWrapper>
                 {/* Top Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
                     {/* Logo + tagline + social */}
@@ -156,7 +157,7 @@ export function Footer() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </CommonWrapper>
 
             {/* Bottom copyright bar */}
             <div className="border-t border-white/10 py-5 text-center">

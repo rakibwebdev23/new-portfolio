@@ -6,6 +6,7 @@ import { Star } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import CommonWrapper from "./CommonWrapper"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -79,7 +80,7 @@ export function Testimonial() {
                 </svg>
             </div>
 
-            <div className="container mx-auto px-6">
+            <CommonWrapper>
                 <div className="testimonial-content grid md:grid-cols-2 gap-12 items-center">
                     {/* LEFT: Notched portrait image with rating badge */}
                     <div className="relative hidden md:flex justify-center items-center">
@@ -162,7 +163,7 @@ export function Testimonial() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </CommonWrapper>
         </section>
     )
 }

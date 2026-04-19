@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import CommonWrapper from "./CommonWrapper"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -106,7 +107,7 @@ export function Services() {
                 </svg>
             </div>
 
-            <div className="container mx-auto px-6">
+            <CommonWrapper>
                 {/* Section Header — 2-column */}
                 <div className="services-header grid md:grid-cols-2 gap-8 mb-16">
                     <div>
@@ -122,8 +123,6 @@ export function Services() {
                     <div className="flex items-end">
                         <p className="text-white/60 text-base max-w-md leading-relaxed">
                             Welcome to the heart of innovation, where design meets purpose.
-                            At Folxo, I offer a range of specialized services crafted to enhance
-                            your digital presence and elevate your brand.
                         </p>
                     </div>
                 </div>
@@ -168,7 +167,6 @@ export function Services() {
                                 ${hoveredIndex === index ? 'bg-white/5 rounded-xl' : ''}
                             `}>
                                 <div className="flex items-center justify-between">
-                                    {/* Number + Title */}
                                     <div className="flex items-center gap-8">
                                         <span className="text-white/30 text-xl font-medium w-12 shrink-0">
                                             {service.number}.
@@ -184,29 +182,26 @@ export function Services() {
                                         </h3>
                                     </div>
 
-                                    {/* Description + Arrow */}
                                     <div className="hidden md:flex items-center gap-8">
                                         <p className="text-white/50 max-w-xs text-sm leading-relaxed">
                                             {service.description}
                                         </p>
-                                        <button className={`
+                                        <div className={`
                                             w-14 h-14 rounded-full flex items-center justify-center border-2 shrink-0 transition-all duration-300
                                             ${hoveredIndex === index
                                                 ? 'bg-[#FF5C00] border-[#FF5C00] text-white'
                                                 : 'border-white/20 text-white hover:border-white/50'}
                                         `}>
                                             <ArrowUpRight className="w-5 h-5" />
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))}
-
-                    {/* Bottom divider */}
                     <div className="border-t border-white/10"></div>
                 </div>
-            </div>
+            </CommonWrapper>
         </section>
     )
 }
