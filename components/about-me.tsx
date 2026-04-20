@@ -101,39 +101,38 @@ export function AboutMe() {
             </div>
 
             <CommonWrapper className="grid md:grid-cols-2 gap-16 items-center">
-                {/* Left: Folxo-style image collage */}
+                {/* Left: Simple Professional Image Collage */}
                 <div className="about-images relative">
                     <div className="relative w-full max-w-[500px]">
-                        <div className="relative bg-[#3d4f5f] rounded-3xl overflow-hidden aspect-[4/3] shadow-xl">
+                        {/* Primary Image */}
+                        <div className="relative bg-[#050C1C]/5 rounded-3xl overflow-hidden aspect-[4/3] shadow-xl group/img">
                             <Image
                                 src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=700&auto=format&fit=crop&q=80"
                                 alt="Design workspace"
                                 fill
-                                className="object-cover"
+                                className="object-cover group-hover/img:scale-105 transition-transform duration-700"
                             />
-                            <div className="absolute bottom-4 left-4 flex gap-2">
-                                {['#f0e6d3', '#b8c4c8', '#8fa3aa', '#d4c1a8'].map((c, i) => (
-                                    <div key={i} className="w-8 h-10 rounded" style={{ backgroundColor: c }} />
+
+                            {/* Color markers refined */}
+                            <div className="absolute bottom-6 left-6 flex gap-3 z-20">
+                                {['#FF5C00', '#050C1C', '#8fa3aa', '#d4c1a8'].map((c, i) => (
+                                    <div key={i} className="w-9 h-2 rounded-full shadow-sm" style={{ backgroundColor: c }} />
                                 ))}
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
-                                    <path d="M1 1L8 21L11 14L18 11L1 1Z" fill="white" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
-                                    <path d="M11 14L18 21" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                </svg>
-                            </div>
                         </div>
-                        <div
-                            className="absolute -bottom-8 -right-4 w-[56%] aspect-[3/4] shadow-xl overflow-hidden border-4 border-[#f5f5f5]"
-                            style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 22% 100%, 0% 78%)" }}
-                        >
+
+                        {/* Secondary Overlaid Image */}
+                        <div className="absolute -bottom-10 -right-4 w-[60%] aspect-[3/4] shadow-2xl overflow-hidden rounded-2xl border-[6px] border-white z-10 group/img2">
                             <Image
                                 src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop"
-                                alt="Robert Fox designer"
+                                alt="MD Rakib Hasan"
                                 fill
-                                className="object-cover"
+                                className="object-cover group-hover/img2:scale-110 transition-transform duration-1000"
                             />
                         </div>
+
+                        {/* Basic Decorative Element */}
+                        <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-[#FF5C00] opacity-20" />
                     </div>
                 </div>
 
@@ -144,16 +143,16 @@ export function AboutMe() {
                         About me
                     </span>
                     <h2 className="text-4xl md:text-5xl font-bold text-[#050C1C] leading-tight mb-6">
-                        Why hire me? Learn what<br />
-                        makes me ideal.
+                        Why Hire Me? Discover What Makes Me a Strong Fit
                     </h2>
                     <p className="text-gray-500 text-base leading-relaxed mb-3">
-                        Welcome to my creative sanctuary! I&apos;m Robert Fox, a passionate UI/UX
-                        designer on a mission to redefine digital experiences.
+                        I’m a passionate MERN Stack Developer who builds scalable, high-performance web applications with a focus on clean code and seamless user experience.
+                    </p>
+                    <p className="text-gray-500 text-base leading-relaxed mb-3">
+                        I specialize in developing full-stack solutions using MongoDB, Express.js, React, and Node.js. My goal is to create efficient, user-friendly, and visually engaging applications that solve real-world problems.
                     </p>
                     <p className="text-gray-500 text-base leading-relaxed mb-10">
-                        I embark on a journey to weave aesthetic elegance and functional
-                        simplicity into every project.
+                        I continuously learn and adapt to new technologies to deliver modern and reliable digital products.
                     </p>
 
                     {/* Stats */}
@@ -171,13 +170,17 @@ export function AboutMe() {
                         ))}
                     </div>
 
-                    <Button
-                        variant="outline"
-                        className="border-2 border-[#050C1C] text-[#050C1C] bg-transparent hover:bg-[#050C1C] hover:text-white rounded-full px-8 py-6 text-base font-semibold group transition-all duration-300"
+                    <button
+                        className="relative flex items-center gap-2 border-2 border-[#050C1C] text-[#050C1C] bg-transparent rounded-full px-8 py-3 text-base font-semibold group cursor-pointer overflow-hidden z-10 transition-colors duration-300"
                     >
-                        Learn more
-                        <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </Button>
+                        {/* Smooth sliding background fill */}
+                        <span className="absolute inset-0 bg-[#050C1C] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
+
+                        <span className="relative z-20 group-hover:text-white transition-colors duration-300">
+                            Learn more
+                        </span>
+                        <ArrowUpRight className="relative z-20 ml-2 h-5 w-5 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white" />
+                    </button>
                 </div>
             </CommonWrapper>
         </section>

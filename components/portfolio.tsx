@@ -69,8 +69,13 @@ export function Portfolio() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
     const sectionRef = useRef<HTMLDivElement>(null)
 
+    const filteredProjects = activeFilter === "All"
+        ? projects
+        : projects.filter(p => p.tags.includes(activeFilter))
+
     useEffect(() => {
         const ctx = gsap.context(() => {
+            // Header animation
             gsap.from(".portfolio-header", {
                 scrollTrigger: {
                     trigger: sectionRef.current,
@@ -83,26 +88,34 @@ export function Portfolio() {
                 ease: "power3.out"
             })
 
-            gsap.from(".portfolio-card", {
-                scrollTrigger: {
-                    trigger: ".portfolio-grid",
-                    start: "top 75%",
-                    toggleActions: "play none none reverse"
-                },
-                y: 40,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: "power3.out"
+            // Stacking Logic
+            const slides = gsap.utils.toArray(".portfolio-slide")
+            slides.forEach((slide: any, i: number) => {
+                ScrollTrigger.create({
+                    trigger: slide,
+                    start: "top top",
+                    pin: true,
+                    pinSpacing: false,
+                    id: `slide-${i}`,
+                    onEnter: () => {
+                        gsap.fromTo(slide.querySelector(".slide-content"),
+                            { y: 60, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+                        )
+                    }
+                })
             })
         }, sectionRef)
 
         return () => ctx.revert()
-    }, [])
+    }, [filteredProjects]) // Refresh triggers when projects are filtered
 
-    const filteredProjects = activeFilter === "All"
-        ? projects
-        : projects.filter(p => p.tags.includes(activeFilter))
+    const handleFilterChange = (tag: string) => {
+        setActiveFilter(tag)
+        setTimeout(() => {
+            ScrollTrigger.refresh()
+        }, 100)
+    }
 
     return (
         <section ref={sectionRef} className="py-24 bg-[#f5f5f5]">
@@ -124,7 +137,7 @@ export function Portfolio() {
                             {filterTags.map((tag) => (
                                 <button
                                     key={tag}
-                                    onClick={() => setActiveFilter(tag)}
+                                    onClick={() => handleFilterChange(tag)}
                                     className={`
                                         px-5 py-2.5 rounded-full text-sm font-medium border transition-all duration-300
                                         ${activeFilter === tag
@@ -139,60 +152,54 @@ export function Portfolio() {
                     </div>
                 </div>
 
-                {/* Projects Grid */}
-                <div className="portfolio-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Projects Stack */}
+                <div className="portfolio-stack relative mt-16">
                     {filteredProjects.map((project, index) => (
                         <div
                             key={`${project.title}-${index}`}
-                            className="portfolio-card group cursor-pointer"
+                            className={`
+                                portfolio-slide h-screen w-full flex items-center justify-center sticky top-0
+                                ${index % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-[#e9e9e9]'}
+                            `}
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                         >
-                            {/* Image Container */}
-                            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-5">
-                                <Image
-                                    src={project.image}
-                                    alt={project.title}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-
-                                {/* Orange circle on hover */}
-                                <div className={`
-                                    absolute inset-0 flex items-center justify-center
-                                    transition-all duration-300
-                                    ${hoveredIndex === index ? 'bg-black/20' : 'bg-transparent'}
-                                `}>
-                                    <div className={`
-                                        w-16 h-16 rounded-full bg-[#FF5C00] flex items-center justify-center
-                                        transition-all duration-300
-                                        ${hoveredIndex === index ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}
-                                    `}>
-                                        <ArrowUpRight className="w-6 h-6 text-white" />
-                                    </div>
+                            <div className="slide-content grid md:grid-cols-2 gap-12 items-center w-full max-w-6xl px-6">
+                                {/* Image Column */}
+                                <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl group transition-all duration-500 hover:shadow-[#FF5C00]/20">
+                                    <Image
+                                        src={project.image}
+                                        alt={project.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
                                 </div>
-                            </div>
 
-                            {/* Project Info */}
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className={`
-                                        text-xl font-bold transition-colors duration-300
-                                        ${(hoveredIndex === index || project.highlighted) ? 'text-[#FF5C00]' : 'text-[#050C1C]'}
-                                    `}>
+                                {/* Details Column */}
+                                <div className="flex flex-col gap-6">
+                                    <span className="text-[#FF5C00] font-bold text-lg uppercase tracking-widest">
+                                        Project // 0{index + 1}
+                                    </span>
+                                    <h3 className="text-4xl md:text-5xl font-black text-[#050C1C] leading-tight">
                                         {project.title}
                                     </h3>
-                                    <p className="text-gray-500 text-sm mt-1">
-                                        {project.category}
+                                    <p className="text-gray-500 text-lg max-w-md">
+                                        Innovative {project.category.toLowerCase()} solution developed with technical precision and design elegance.
                                     </p>
-                                </div>
-                                <div className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 shrink-0
-                                    ${hoveredIndex === index
-                                        ? 'border-[#FF5C00] text-[#FF5C00]'
-                                        : 'border-gray-300 text-gray-400'}
-                                `}>
-                                    <ArrowUpRight className="w-4 h-4" />
+                                    <div className="flex flex-wrap gap-3 mt-2">
+                                        {project.tags.map(tag => (
+                                            <span key={tag} className="px-4 py-1.5 bg-white border border-gray-200 rounded-full text-sm font-semibold text-gray-600">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <Link href="#" className="inline-flex items-center gap-3 mt-6 text-[#050C1C] font-bold text-lg group/link">
+                                        View Case Study
+                                        <div className="w-12 h-12 rounded-full bg-[#050C1C] text-white flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:translate-x-2">
+                                            <ArrowUpRight className="w-6 h-6" />
+                                        </div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -202,3 +209,5 @@ export function Portfolio() {
         </section>
     )
 }
+
+import Link from "next/link"

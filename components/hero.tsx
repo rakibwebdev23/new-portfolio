@@ -11,6 +11,7 @@ import CommonWrapper from "./CommonWrapper"
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null)
+    const magneticButtonRef = useRef<HTMLButtonElement>(null)
     const [isVisible, setIsVisible] = useState(false)
 
     // Handle scroll-to-top visibility
@@ -31,20 +32,22 @@ export function Hero() {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power4.out" } })
 
-            // hero text lines slide up
-            tl.from(".hero-line", {
-                y: 80,
+            // hero words reveal
+            tl.from(".hero-word", {
+                y: "110%",
                 opacity: 0,
+                rotateX: -20,
                 duration: 1.1,
-                stagger: 0.12,
-                delay: 0.15,
+                stagger: 0.08,
+                ease: "power4.out",
+                delay: 0.1,
             })
 
             // sub elements fade up
             tl.from(".hero-sub", {
-                y: 28,
+                y: 20,
                 opacity: 0,
-                duration: 0.75,
+                duration: 0.8,
                 stagger: 0.1,
             }, "-=0.7")
 
@@ -57,45 +60,114 @@ export function Hero() {
             }, "-=1.1")
 
             // floating cards entrance
-            tl.from(".float-badge, .float-id-card, .float-sparkle", {
+            tl.from(".float-badge, .float-id-card", {
                 x: 40,
                 opacity: 0,
-                duration: 0.9,
-                stagger: 0.18,
-            }, "-=0.6")
+                duration: 1.2,
+                stagger: 0.2,
+                ease: "power3.out",
+            }, "-=0.8")
 
-            // continuous float animations
-            gsap.to(".float-sparkle", {
+            // background arcs entrance
+            tl.from(".hero-arcs", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 2,
+                ease: "power2.out",
+            }, 0)
+
+            // continuous organic float animations
+            // badge float
+            gsap.to(".float-badge-inner", {
+                y: 12,
+                x: 6,
+                rotation: 3,
+                duration: 3.2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                force3D: true,
+                rotationZ: 0.01,
+            })
+            // identity card float
+            gsap.to(".float-id-card-inner", {
                 y: -12,
-                duration: 2.6,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-            })
-            // badge
-            gsap.to(".float-badge", {
-                y: 24,
+                x: -6,
+                rotation: -3,
                 duration: 3.8,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut",
-                delay: 0.2,
+                force3D: true,
+                rotationZ: 0.01,
+                delay: 0.5,
             })
-            // identity card
-            gsap.to(".float-id-card", {
-                y: -24,
-                duration: 3.8,
+
+            // glow blobs breathing
+            gsap.to(".glow-blob", {
+                scale: 1.15,
+                opacity: 0.15,
+                duration: 4,
                 repeat: -1,
                 yoyo: true,
+                stagger: 0.5,
                 ease: "sine.inOut",
-                delay: 1.8,
             })
 
             // mouse parallax
             const onMouseMove = (e: MouseEvent) => {
-                const xP = (e.clientX / window.innerWidth - 0.5) * 24
-                const yP = (e.clientY / window.innerHeight - 0.5) * 24
-                gsap.to(".parallax-bg", { x: xP, y: yP, duration: 1.1, ease: "power2.out" })
+                const { clientX, clientY } = e
+                const xPos = (clientX / window.innerWidth - 0.5)
+                const yPos = (clientY / window.innerHeight - 0.5)
+
+                // Background parallax
+                gsap.to(".parallax-bg", {
+                    x: xPos * 40,
+                    y: yPos * 40,
+                    duration: 1.2,
+                    ease: "power2.out",
+                })
+
+                // Cards parallax
+                gsap.to(".float-badge", {
+                    x: xPos * 55,
+                    y: yPos * 55,
+                    duration: 1.5,
+                    ease: "power3.out",
+                })
+
+                gsap.to(".float-id-card", {
+                    x: xPos * -45,
+                    y: yPos * -45,
+                    duration: 1.8,
+                    ease: "power3.out",
+                })
+
+                // Magnetic button logic
+                if (magneticButtonRef.current) {
+                    const rect = magneticButtonRef.current.getBoundingClientRect()
+                    const centerX = rect.left + rect.width / 2
+                    const centerY = rect.top + rect.height / 2
+                    const distance = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2)
+
+                    if (distance < 160) {
+                        const magX = (clientX - centerX) * 0.4
+                        const magY = (clientY - centerY) * 0.4
+                        gsap.to(magneticButtonRef.current, {
+                            x: magX,
+                            y: magY,
+                            duration: 0.6,
+                            ease: "power2.out",
+                        })
+                    } else {
+                        gsap.to(magneticButtonRef.current, {
+                            x: 0,
+                            y: 0,
+                            duration: 0.8,
+                            ease: "elastic.out(1, 0.5)",
+                        })
+                    }
+                }
             }
             window.addEventListener("mousemove", onMouseMove)
             return () => window.removeEventListener("mousemove", onMouseMove)
@@ -107,20 +179,20 @@ export function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative min-h-[90vh] bg-[#050b1b] flex items-center overflow-hidden pt-40 pb-28"
+            className="relative min-h-screen bg-[#050b1b] flex items-center overflow-hidden pt-40 pb-28"
         >
             {/* ── Background ── */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 {/* Concentric arcs top-right */}
-                <svg className="absolute -top-32 -right-32 w-[700px] h-[700px] opacity-[0.12]" viewBox="0 0 700 700">
+                <svg className="hero-arcs absolute -top-32 -right-32 w-[700px] h-[700px] opacity-[0.12]" viewBox="0 0 700 700">
                     {[110, 175, 240, 305, 370, 435].map((r) => (
                         <circle key={r} cx="700" cy="0" r={r * 1.55} stroke="white" strokeWidth="1" fill="none" />
                     ))}
                 </svg>
 
                 {/* Glow blobs */}
-                <div className="absolute top-1/2 left-1/3 w-[560px] h-[560px] bg-blue-700/8 rounded-full blur-[160px]" />
-                <div className="absolute bottom-1/4 right-1/4 w-[380px] h-[380px] bg-orange-600/10 rounded-full blur-[130px]" />
+                <div className="parallax-bg glow-blob absolute top-1/2 left-1/3 w-[560px] h-[560px] bg-blue-700/8 rounded-full blur-[160px]" />
+                <div className="parallax-bg glow-blob absolute bottom-1/4 right-1/4 w-[380px] h-[380px] bg-orange-600/10 rounded-full blur-[130px]" />
             </div>
 
             {/* ── Main Grid ── */}
@@ -130,11 +202,11 @@ export function Hero() {
                 <div className="space-y-7 md:pl-6">
                     {/* Hello badge */}
                     <div className="hero-line relative inline-flex items-center">
-                        <svg className="absolute -left-8 -top-6 w-8 h-8" viewBox="0 0 32 32" fill="none">
+                        <svg className="parallax-bg absolute -left-8 -top-6 w-8 h-8" viewBox="0 0 32 32" fill="none">
                             <path d="M4 26 C6 12, 14 6, 20 18" stroke="#FF5C00" strokeWidth="2.2" strokeLinecap="round" />
                             <path d="M10 28 C12 14, 20 8, 26 20" stroke="#FF5C00" strokeWidth="2.2" strokeLinecap="round" />
                         </svg>
-                        <svg className="absolute -right-8 -top-6 w-8 h-8" viewBox="0 0 32 32" fill="none">
+                        <svg className="parallax-bg absolute -right-8 -top-6 w-8 h-8" viewBox="0 0 32 32" fill="none">
                             <path d="M28 26 C26 12, 18 6, 12 18" stroke="#FF5C00" strokeWidth="2.2" strokeLinecap="round" />
                             <path d="M22 28 C20 14, 12 8, 6 20" stroke="#FF5C00" strokeWidth="2.2" strokeLinecap="round" />
                         </svg>
@@ -145,26 +217,36 @@ export function Hero() {
 
                     {/* Heading */}
                     <h1 className="text-[2.75rem] md:text-[3.5rem] lg:text-[4.25rem] font-extrabold text-white leading-[1.07]">
-                        <div className="hero-line overflow-hidden">Design . Code .</div>
-                        <div className="hero-line overflow-hidden">Web Experiences</div>
+                        <div className="overflow-hidden pb-1">
+                            {"Design . Code .".split(" ").map((word, i) => (
+                                <span key={i} className="hero-word inline-block mr-[0.3em]">{word}</span>
+                            ))}
+                        </div>
+                        <div className="overflow-hidden pb-1">
+                            {"Web Experiences".split(" ").map((word, i) => (
+                                <span key={i} className="hero-word inline-block mr-[0.3em]">{word}</span>
+                            ))}
+                        </div>
 
                         {/* Orange typewriter line */}
-                        <div className="hero-line text-[#FF5C00] relative min-h-[1.2em] flex items-center">
-                            <TypeAnimation
-                                sequence={[
-                                    "Clean Code", 2200, "", 400,
-                                    "Modern UI", 2200, "", 400,
-                                    "Interactive", 2200, "", 400,
-                                    "Scalable", 2200, "", 400,
-                                ]}
-                                wrapper="span"
-                                speed={60}
-                                deletionSpeed={50}
-                                cursor={true}
-                                repeat={Infinity}
-                                className="inline-block"
-                                style={{ display: "inline-block" }}
-                            />
+                        <div className="relative min-h-[1.2em] flex items-center">
+                            <div className="overflow-hidden">
+                                <TypeAnimation
+                                    sequence={[
+                                        "Clean Code", 2200, "", 400,
+                                        "Modern UI", 2200, "", 400,
+                                        "Interactive", 2200, "", 400,
+                                        "Scalable", 2200, "", 400,
+                                    ]}
+                                    wrapper="span"
+                                    speed={60}
+                                    deletionSpeed={50}
+                                    cursor={true}
+                                    repeat={Infinity}
+                                    className="hero-word inline-block text-[#FF5C00]"
+                                    style={{ display: "inline-block" }}
+                                />
+                            </div>
                             {/* Double wave underline */}
                             <svg
                                 className="absolute -bottom-4 left-0 w-[65%] h-6 pointer-events-none"
@@ -185,8 +267,11 @@ export function Hero() {
 
                     {/* CTA row */}
                     <div className="hero-sub flex flex-wrap items-center gap-8 pt-2">
-                        <Link href="/contact">
-                            <button className="group flex items-center gap-3 bg-[#FF5C00] hover:bg-[#e65200] active:scale-95 text-white rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:scale-105 cursor-pointer">
+                        <Link href="/contact" className="block">
+                            <button
+                                ref={magneticButtonRef}
+                                className="group flex items-center gap-3 bg-[#FF5C00] hover:bg-[#e65200] active:scale-95 text-white rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 cursor-pointer will-change-transform"
+                            >
                                 Hire me
                                 <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
                             </button>
@@ -240,16 +325,16 @@ export function Hero() {
                         </div>
 
                         {/* Experience badge */}
-                        <div className="float-badge absolute -bottom-6 -right-5 z-30">
-                            <div className="bg-[#FF5C00] rounded-[1.2rem] px-5 py-3.5 shadow-lg flex flex-col items-center">
+                        <div className="float-badge absolute -bottom-6 -right-5 z-30 will-change-transform">
+                            <div className="float-badge-inner bg-[#FF5C00] rounded-[1.2rem] px-5 py-3.5 shadow-lg flex flex-col items-center will-change-transform">
                                 <span className="text-white font-black text-[1.6rem] leading-none">3+</span>
                                 <span className="text-white/85 font-bold text-[9px] uppercase tracking-widest mt-1">Years Exp.</span>
                             </div>
                         </div>
 
                         {/* Identity Card */}
-                        <div className="float-id-card absolute -left-[70px] bottom-[36%] z-30">
-                            <div className="bg-white rounded-2xl py-3 px-4 shadow-xl flex items-center gap-3 border border-gray-100 min-w-[210px]">
+                        <div className="float-id-card absolute -left-[70px] bottom-[36%] z-30 will-change-transform">
+                            <div className="float-id-card-inner bg-white rounded-2xl py-3 px-4 shadow-xl flex items-center gap-3 border border-gray-100 min-w-[210px] will-change-transform">
                                 <div className="w-11 h-11 rounded-xl overflow-hidden relative border-2 border-[#FF5C00]/20">
                                     <Image src="/images/profile.jpg" alt="Avatar" fill className="object-cover" />
                                 </div>
