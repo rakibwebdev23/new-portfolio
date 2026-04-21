@@ -5,7 +5,7 @@ import { AboutMe } from "@/components/about-me";
 import { Services } from "@/components/services";
 import { Portfolio } from "@/components/portfolio";
 import { Testimonial } from "@/components/testimonial";
-import { MarqueeText } from "@/components/marquee-text";
+// import { MarqueeText } from "@/components/marquee-text";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
             <Services />
             <Portfolio />
             <Testimonial />
-            <MarqueeText />
+            {/* <MarqueeText /> */}
             <Footer />
         </main>
     );
