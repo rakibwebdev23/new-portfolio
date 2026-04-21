@@ -77,7 +77,7 @@ export function AboutMe() {
     }, [])
 
     return (
-        <section ref={sectionRef} className="py-24 bg-[#f5f5f5] relative overflow-hidden">
+        <section ref={sectionRef} className="py-24 bg-[#f5f5f5] relative overflow-hidden min-h-screen">
             {/* Decorative elements */}
             <div className="absolute top-16 right-24 opacity-30 pointer-events-none">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none">

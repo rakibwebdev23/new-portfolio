@@ -176,11 +176,13 @@ export function Hero() {
         return () => ctx.revert()
     }, { scope: containerRef })
 
+    // bg-[#050b1b]
+
     return (
         <section
-            ref={containerRef}
-            className="relative min-h-screen bg-[#050b1b] flex items-center overflow-hidden pt-40 pb-28"
-        >
+            ref={containerRef}  
+            className="relative min-h-screen bg-black flex items-center overflow-hidden pt-40 pb-28"
+        > 
             {/* ── Background ── */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 {/* Concentric arcs top-right */}
