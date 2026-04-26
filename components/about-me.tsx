@@ -102,6 +102,7 @@ export function AboutMe() {
 
             <CommonWrapper className="grid md:grid-cols-2 gap-16 items-center">
                 {/* Left: Simple Professional Image Collage */}
+                
                 <div className="about-images relative">
                     <div className="relative w-full max-w-[500px]">
                         {/* Primary Image */}

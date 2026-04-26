@@ -6,13 +6,17 @@ import Link from "next/link"
 import { ArrowRight, ArrowUp } from "lucide-react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
-import { TypeAnimation } from "react-type-animation"
+// import { TypeAnimation } from "react-type-animation"
 import CommonWrapper from "./CommonWrapper"
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null)
     const magneticButtonRef = useRef<HTMLButtonElement>(null)
     const [isVisible, setIsVisible] = useState(false)
+
+    const phrases = ["Clean Code", "Modern UI", "Interactive", "Scalable"]
+    const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
+    const wordRef = useRef<HTMLDivElement>(null)
 
     // Handle scroll-to-top visibility
     useEffect(() => {
@@ -26,6 +30,39 @@ export function Hero() {
 
         window.addEventListener("scroll", toggleVisibility)
         return () => window.removeEventListener("scroll", toggleVisibility)
+    }, [])
+
+    // Function to animate out characters before changing phrase
+    const animateOutAndChange = () => {
+        if (!wordRef.current) return
+
+        const tl = gsap.timeline({
+            onComplete: () => {
+                setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length)
+            }
+        })
+
+        tl.to(".char-span", {
+            y: -60,
+            opacity: 0,
+            rotateX: 90,
+            scale: 0.3,
+            z: -500,
+            duration: 1.2,
+            stagger: {
+                each: 0.1,
+                from: "end"
+            },
+            ease: "back.in(2)"
+        })
+    }
+
+    // Cycle through phrases
+    useEffect(() => {
+        const interval = setInterval(() => {
+            animateOutAndChange()
+        }, 5000)
+        return () => clearInterval(interval)
     }, [])
 
     useGSAP(() => {
@@ -176,13 +213,58 @@ export function Hero() {
         return () => ctx.revert()
     }, { scope: containerRef })
 
+    // Animation for phrase rotator
+    useGSAP(() => {
+        if (!wordRef.current) return
+
+        const ctx = gsap.context(() => {
+            gsap.fromTo(".char-span",
+                {
+                    y: 60,
+                    opacity: 0,
+                    scale: 0.3,
+                    rotateX: -90,
+                    z: -500
+                },
+                {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    rotateX: 0,
+                    z: 0,
+                    duration: 1.8,
+                    stagger: 0.1,
+                    ease: "elastic.out(1, 0.6)"
+                }
+            )
+
+            // bg waves oscillation
+            gsap.to(".bg-wave-1", {
+                x: "-8%",
+                duration: 12,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            })
+            gsap.to(".bg-wave-2", {
+                x: "10%",
+                duration: 15,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                delay: 0.5
+            })
+        }, wordRef)
+        return () => ctx.revert()
+    }, { dependencies: [currentPhraseIndex], scope: wordRef })
+
     // bg-[#050b1b]
 
     return (
         <section
-            ref={containerRef}  
+            ref={containerRef}
             className="relative min-h-screen bg-black flex items-center overflow-hidden pt-40 pb-28"
-        > 
+        >
             {/* ── Background ── */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                 {/* Concentric arcs top-right */}
@@ -195,6 +277,18 @@ export function Hero() {
                 {/* Glow blobs */}
                 <div className="parallax-bg glow-blob absolute top-1/2 left-1/3 w-[560px] h-[560px] bg-blue-700/8 rounded-full blur-[160px]" />
                 <div className="parallax-bg glow-blob absolute bottom-1/4 right-1/4 w-[380px] h-[380px] bg-orange-600/10 rounded-full blur-[130px]" />
+
+                {/* Big Background Waves */}
+                <div className="bg-wave-1 absolute -bottom-1/4 -left-1/4 w-[150%] h-[60%] opacity-[0.07] pointer-events-none">
+                    <svg className="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="#FF5C00" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,224C960,245,1056,235,1152,202.7C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+                </div>
+                <div className="bg-wave-2 absolute -bottom-1/3 -right-1/4 w-[150%] h-[60%] opacity-[0.05] pointer-events-none">
+                    <svg className="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="#0066FF" d="M0,192L48,181.3C96,171,192,149,288,144C384,139,480,149,576,170.7C672,192,768,224,864,213.3C960,203,1056,149,1152,144C1248,139,1344,181,1392,202.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+                </div>
             </div>
 
             {/* ── Main Grid ── */}
@@ -230,24 +324,17 @@ export function Hero() {
                             ))}
                         </div>
 
-                        {/* Orange typewriter line */}
                         <div className="relative min-h-[1.2em] flex items-center">
-                            <div className="overflow-hidden">
-                                <TypeAnimation
-                                    sequence={[
-                                        "Clean Code", 2200, "", 400,
-                                        "Modern UI", 2200, "", 400,
-                                        "Interactive", 2200, "", 400,
-                                        "Scalable", 2200, "", 400,
-                                    ]}
-                                    wrapper="span"
-                                    speed={60}
-                                    deletionSpeed={50}
-                                    cursor={true}
-                                    repeat={Infinity}
-                                    className="hero-word inline-block text-[#FF5C00]"
-                                    style={{ display: "inline-block" }}
-                                />
+                            <div className="overflow-hidden py-1" ref={wordRef}>
+                                {phrases[currentPhraseIndex].split("").map((char, i) => (
+                                    <span
+                                        key={`${currentPhraseIndex}-${i}`}
+                                        className="char-span inline-block text-[#FF5C00] font-extrabold"
+                                        style={{ whiteSpace: char === " " ? "pre" : "normal" }}
+                                    >
+                                        {char}
+                                    </span>
+                                ))}
                             </div>
                             {/* Double wave underline */}
                             <svg
