@@ -1,19 +1,16 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { ArrowUpRight } from "lucide-react"
 import CommonWrapper from "./CommonWrapper"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Image from "next/image"
 
 gsap.registerPlugin(ScrollTrigger)
 
 const stats = [
     { value: "5+", label: "Years of experience" },
-    { value: "500+", label: "Satisfied clients" },
-    { value: "98%", label: "Positive review" }
+    { value: "30+", label: "Projects Completed" },
+    { value: "98%", label: "Client Satisfaction" }
 ]
 
 export function AboutMe() {
@@ -22,28 +19,18 @@ export function AboutMe() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.from(".about-content", {
+            // General entrance for cards
+            gsap.from(".bento-card", {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 75%",
                     toggleActions: "play none none reverse"
                 },
-                y: 60,
+                y: 50,
                 opacity: 0,
                 duration: 0.8,
-                ease: "power3.out"
-            })
-
-            gsap.from(".about-images", {
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 75%",
-                    toggleActions: "play none none reverse"
-                },
-                x: -60,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out"
+                stagger: 0.15,
+                ease: "power4.out"
             })
 
             // Animate stats counters
@@ -55,7 +42,7 @@ export function AboutMe() {
                         { val: 0 },
                         { val: parseInt(rawVal) },
                         {
-                            duration: 2,
+                            duration: 2.5,
                             ease: "power2.out",
                             scrollTrigger: {
                                 trigger: ref,
@@ -77,111 +64,91 @@ export function AboutMe() {
     }, [])
 
     return (
-        <section ref={sectionRef} className="py-24 bg-[#f5f5f5] relative overflow-hidden min-h-screen">
-            {/* Decorative elements */}
-            <div className="absolute top-16 right-24 opacity-30 pointer-events-none">
-                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                    <rect x="10" y="10" width="60" height="60" stroke="#FF5C00" strokeWidth="1.5" fill="none" transform="rotate(45 40 40)" />
-                    {Array.from({ length: 8 }).map((_, i) => (
-                        <line key={i} x1={10 + i * 9} y1="10" x2={10 + i * 9} y2="70" stroke="#FF5C00" strokeWidth="0.8" opacity="0.5" />
-                    ))}
-                </svg>
-            </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 opacity-30 pointer-events-none">
-                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-                    <circle cx="60" cy="60" r="50" stroke="#FF5C00" strokeWidth="1.5" fill="none" />
-                    <circle cx="60" cy="60" r="36" stroke="#FF5C00" strokeWidth="1" fill="none" />
-                </svg>
-            </div>
-            <div className="absolute bottom-24 right-36 opacity-60 pointer-events-none">
-                <svg width="90" height="60" viewBox="0 0 90 60" fill="none">
-                    <path d="M5 50 C20 10, 50 55, 85 20" stroke="#FF5C00" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                    <path d="M5 55 C20 15, 50 60, 85 25" stroke="#FF5C00" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6" />
-                </svg>
+        <section ref={sectionRef} className="py-24 md:py-32 bg-[#020617] relative overflow-hidden min-h-screen flex items-center">
+            {/* ── Background Atmospheric Glows ── */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-orange-600/5 rounded-full blur-[140px]" />
+                <div className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[140px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
             </div>
 
-            <CommonWrapper className="grid md:grid-cols-2 gap-16 items-center">
-                {/* Left: Simple Professional Image Collage */}
-                
-                <div className="about-images relative">
-                    <div className="relative w-full max-w-[500px]">
-                        {/* Primary Image */}
-                        <div className="relative bg-[#050C1C]/5 rounded-3xl overflow-hidden aspect-[4/3] shadow-xl group/img">
-                            <Image
-                                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=700&auto=format&fit=crop&q=80"
-                                alt="Design workspace"
-                                fill
-                                className="object-cover group-hover/img:scale-105 transition-transform duration-700"
-                            />
+            <CommonWrapper className="relative z-10">
+                <div className="flex flex-col gap-10">
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-4">
+                        <div className="max-w-2xl">
+                            <span className="text-[#FF5C00] text-sm font-bold uppercase tracking-[0.4em] mb-4 block">
+                                Professional Overview
+                            </span>
+                            <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
+                                Md Rakib Hasan <br />
+                                <span className="text-white/40">Full-Stack Architect</span>
+                            </h2>
+                        </div>
+                        <div className="h-px flex-1 bg-white/10 hidden md:block mb-6 ml-12"></div>
+                    </div>
 
-                            {/* Color markers refined */}
-                            <div className="absolute bottom-6 left-6 flex gap-3 z-20">
-                                {['#FF5C00', '#050C1C', '#8fa3aa', '#d4c1a8'].map((c, i) => (
-                                    <div key={i} className="w-9 h-2 rounded-full shadow-sm" style={{ backgroundColor: c }} />
-                                ))}
+                    {/* Bento Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+                        {/* Bio Card (Large) */}
+                        <div className="md:col-span-2 lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col justify-between group hover:bg-white/[0.05] transition-all duration-500">
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-[#FF5C00]"></span>
+                                    The Narrative
+                                </h3>
+                                <p className="text-white/60 text-lg leading-relaxed">
+                                    Motivated MERN Stack Developer with strong expertise in modern frontend frameworks and backend technologies.
+                                    Experienced in leading teams and building scalable SaaS dashboards, role-based systems, and performance-optimized web applications.
+                                    I blend technical precision with creative problem-solving to deliver high-impact digital solutions.
+                                </p>
+                            </div>
+                            <div className="mt-8 flex items-center gap-4 text-[#FF5C00] font-bold text-sm tracking-widest uppercase">
+                                Crafting Excellence
                             </div>
                         </div>
 
-                        {/* Secondary Overlaid Image */}
-                        <div className="absolute -bottom-10 -right-4 w-[60%] aspect-[3/4] shadow-2xl overflow-hidden rounded-2xl border-[6px] border-white z-10 group/img2">
-                            <Image
-                                src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop"
-                                alt="MD Rakib Hasan"
-                                fill
-                                className="object-cover group-hover/img2:scale-110 transition-transform duration-1000"
-                            />
+                        {/* Career Card (Vertical) */}
+                        <div className="md:col-span-1 lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col group hover:bg-white/[0.05] transition-all duration-500">
+                            <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                                Current Mission
+                            </h3>
+                            <div className="space-y-6">
+                                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5">
+                                    <p className="text-[#FF5C00] text-xs font-black uppercase tracking-tighter mb-1">June 2025 — Present</p>
+                                    <h4 className="text-2xl font-bold text-white">Frontend Developer</h4>
+                                    <p className="text-white/50 font-medium">Softvence Agency, Dhaka</p>
+                                </div>
+                                <div className="space-y-4 text-white/40 text-sm italic border-l-2 border-white/5 pl-6">
+                                    "Leading frontend architecture and optimizing React-based systems for high-traffic agency clients."
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Basic Decorative Element */}
-                        <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-[#FF5C00] opacity-20" />
-                    </div>
-                </div>
+                        {/* Stats Cards (Compact) */}
+                        <div className="bento-card p-8 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col items-center justify-center text-center group hover:border-[#FF5C00]/30 transition-all duration-500">
+                            <span ref={(el) => { counterRefs.current[0] = el }} className="text-5xl font-black text-white mb-2">0</span>
+                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Experience</span>
+                        </div>
 
-                {/* Right: Content */}
-                <div className="about-content">
-                    <span className="text-[#FF5C00] text-sm font-semibold flex items-center gap-3 mb-5">
-                        <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
-                        About me
-                    </span>
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#050C1C] leading-tight mb-6">
-                        Why Hire Me? Discover What Makes Me a Strong Fit
-                    </h2>
-                    <p className="text-gray-500 text-base leading-relaxed mb-3">
-                        I’m a passionate MERN Stack Developer who builds scalable, high-performance web applications with a focus on clean code and seamless user experience.
-                    </p>
-                    <p className="text-gray-500 text-base leading-relaxed mb-3">
-                        I specialize in developing full-stack solutions using MongoDB, Express.js, React, and Node.js. My goal is to create efficient, user-friendly, and visually engaging applications that solve real-world problems.
-                    </p>
-                    <p className="text-gray-500 text-base leading-relaxed mb-10">
-                        I continuously learn and adapt to new technologies to deliver modern and reliable digital products.
-                    </p>
+                        <div className="bento-card p-8 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col items-center justify-center text-center group hover:border-[#FF5C00]/30 transition-all duration-500">
+                            <span ref={(el) => { counterRefs.current[1] = el }} className="text-5xl font-black text-white mb-2">0</span>
+                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Projects</span>
+                        </div>
 
-                    {/* Stats */}
-                    <div className="flex items-stretch gap-0 mb-10">
-                        {stats.map((stat, index) => (
-                            <div key={index} className={`flex-1 ${index > 0 ? 'pl-6 border-l border-gray-300' : ''} ${index < stats.length - 1 ? 'pr-6' : ''}`}>
-                                <span
-                                    ref={el => { counterRefs.current[index] = el }}
-                                    className="text-4xl font-bold text-[#050C1C] block mb-1"
-                                >
-                                    0{stat.value.replace(/[0-9]/g, '')}
-                                </span>
-                                <span className="text-gray-500 text-sm">{stat.label}</span>
+                        <div className="lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex items-center justify-between group hover:bg-white/[0.05] transition-all duration-500">
+                            <div className="flex flex-col">
+                                <span ref={(el) => { counterRefs.current[2] = el }} className="text-5xl font-black text-[#FF5C00] mb-1">0</span>
+                                <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Client Satisfaction</span>
                             </div>
-                        ))}
+                            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5C00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <button
-                        className="relative flex items-center gap-2 border-2 border-[#050C1C] text-[#050C1C] bg-transparent rounded-full px-8 py-3 text-base font-semibold group cursor-pointer overflow-hidden z-10 transition-colors duration-300"
-                    >
-                        {/* Smooth sliding background fill */}
-                        <span className="absolute inset-0 bg-[#050C1C] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
-
-                        <span className="relative z-20 group-hover:text-white transition-colors duration-300">
-                            Learn more
-                        </span>
-                        <ArrowUpRight className="relative z-20 ml-2 h-5 w-5 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white" />
-                    </button>
                 </div>
             </CommonWrapper>
         </section>

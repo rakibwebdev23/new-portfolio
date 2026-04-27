@@ -11,7 +11,6 @@ import CommonWrapper from "./CommonWrapper"
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null)
-    const magneticButtonRef = useRef<HTMLButtonElement>(null)
     const [isVisible, setIsVisible] = useState(false)
 
     const phrases = ["Clean Code", "Modern UI", "Interactive", "Scalable"]
@@ -179,32 +178,6 @@ export function Hero() {
                     duration: 1.8,
                     ease: "power3.out",
                 })
-
-                // Magnetic button logic
-                if (magneticButtonRef.current) {
-                    const rect = magneticButtonRef.current.getBoundingClientRect()
-                    const centerX = rect.left + rect.width / 2
-                    const centerY = rect.top + rect.height / 2
-                    const distance = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2)
-
-                    if (distance < 160) {
-                        const magX = (clientX - centerX) * 0.4
-                        const magY = (clientY - centerY) * 0.4
-                        gsap.to(magneticButtonRef.current, {
-                            x: magX,
-                            y: magY,
-                            duration: 0.6,
-                            ease: "power2.out",
-                        })
-                    } else {
-                        gsap.to(magneticButtonRef.current, {
-                            x: 0,
-                            y: 0,
-                            duration: 0.8,
-                            ease: "elastic.out(1, 0.5)",
-                        })
-                    }
-                }
             }
             window.addEventListener("mousemove", onMouseMove)
             return () => window.removeEventListener("mousemove", onMouseMove)
@@ -358,11 +331,18 @@ export function Hero() {
                     <div className="hero-sub flex flex-wrap items-center gap-8 pt-2">
                         <Link href="/contact" className="block">
                             <button
-                                ref={magneticButtonRef}
-                                className="group flex items-center gap-3 bg-[#FF5C00] hover:bg-[#e65200] active:scale-95 text-white rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 cursor-pointer will-change-transform"
+                                className="group relative flex items-center gap-3 border-2 border-[#FF5C00] text-white bg-transparent rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 cursor-pointer overflow-hidden z-10"
                             >
-                                Hire me
-                                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                {/* Default background color */}
+                                <span className="absolute inset-0 bg-[#FF5C00] -z-20" />
+
+                                {/* Smooth sliding background fill (Black) */}
+                                <span className="absolute inset-0 bg-[#050C1C] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
+
+                                <span className="relative z-20 transition-colors duration-300">
+                                    Hire me
+                                </span>
+                                <ArrowRight className="relative z-20 w-5 h-5 transition-all duration-300 group-hover:translate-x-1" />
                             </button>
                         </Link>
                     </div>
