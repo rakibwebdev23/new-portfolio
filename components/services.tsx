@@ -19,33 +19,27 @@ interface Service {
 const services: Service[] = [
     {
         number: "01",
-        title: "UI/UX design",
+        title: "Frontend Development",
         description: "Immerse your audience in seamless, visually compelling experiences.",
         image: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "02",
-        title: "Web design",
+        title: "Backend Development",
         description: "Transform your online presence with thoughtfully designed websites.",
         image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "03",
-        title: "Prototyping",
+        title: "Tools",
         description: "Through meticulous prototyping, I provide a tangible preview of your project",
         image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?w=600&auto=format&fit=crop&q=60"
     },
     {
         number: "04",
-        title: "Branding design",
+        title: "Deployment",
         description: "Whether you're establishing a new brand or revamping an existing one",
         image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=60"
-    },
-    {
-        number: "05",
-        title: "App design",
-        description: "I will create an intuitive mobile app to streamline your business operations",
-        image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&auto=format&fit=crop&q=60"
     }
 ]
 
@@ -169,13 +163,13 @@ export function Services() {
                 <div className="services-header ">
                     <span className="text-[#FF5C00] text-sm font-semibold flex items-center gap-3 mb-5">
                         <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
-                        My services
+                        My Skills
                     </span>
                     <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-28">
 
                         <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-                            Innovative design services<br />
-                            for your unique vision
+                            My Skills <br />
+                            & Tech Stack
                         </h2>
                         {/* <div className="flex items-end">
                             <p className="text-white/60 text-base max-w-md leading-relaxed">

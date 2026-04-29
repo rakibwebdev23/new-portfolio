@@ -50,49 +50,29 @@ const floatingImages = [
 const education = [
     {
         degree: "B.Sc in Computer Science & Engineering",
-        institution: "Green University of Bangladesh",
-        year: "2020–2024",
+        institution: "Sonargaon University ( SU )",
+        year: "2019–2023",
     },
     {
         degree: "HSC in Science",
-        institution: "Dhaka City College",
-        year: "2018–2020",
+        institution: "Shahid Smrity College",
+        year: "2015–2016",
     },
     {
-        degree: "Certification in MERN Stack Development",
+        degree: "Certification in Full Stack Web Development",
         institution: "Programming Hero",
-        year: "2022",
+        year: "2025",
     },
 ]
 
 const experience = [
     {
         role: "Frontend Developer",
-        company: "Softvence Agency, Dhaka",
-        year: "2025–Present",
-    },
-    {
-        role: "Junior Frontend Developer",
-        company: "Freelance / Remote",
-        year: "2023–2025",
-    },
-    {
-        role: "Intern – Web Development",
-        company: "Tech Startup, Dhaka",
-        year: "2022",
-    },
+        company: "Softvence Agency, Dhaka, Bangladesh",
+        year: "June 2025–Present",
+    }
 ]
 
-const clients = [
-    "Softvence Agency",
-    "Dream Keeper",
-    "SaaS Startups",
-    "E-Commerce Brands",
-    "Creative Studios",
-    "Digital Agencies",
-]
-
-// ── Component ──────────────────────────────────────────────────────────────
 export function AboutMe() {
     const componentRef = useRef<HTMLDivElement>(null)
     const heroRef = useRef<HTMLElement>(null)
@@ -261,9 +241,7 @@ export function AboutMe() {
                     </h1>
 
                     <p className="text-white/50 text-base md:text-lg leading-relaxed max-w-xl mx-auto drop-shadow-xl">
-                        I specialize in crafting high-performance web applications, blending
-                        technical precision with creative design thinking. My work bridges
-                        scalable backend systems and polished, engaging frontends.
+                        I’m a MERN Stack Developer with a strong focus on frontend engineering. I specialize in building fast, scalable, and visually refined web applications using React and Next.js. My goal is to create seamless user experiences that not only look great but also perform flawlessly across all devices.
                     </p>
                 </div>
 
@@ -273,7 +251,7 @@ export function AboutMe() {
                     className="absolute top-1/2 left-1/2 w-[260px] h-[350px] md:w-[320px] md:h-[420px] rounded-2xl overflow-hidden shadow-2xl z-30 pointer-events-none opacity-0"
                 >
                     <Image
-                        src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=60"
+                        src="/images/about.jpg"
                         alt="My Profile Picture"
                         fill
                         sizes="320px"
@@ -325,7 +303,7 @@ export function AboutMe() {
                     {/* Experience */}
                     <div className="about-info-section">
                         <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
-                            Experience
+                            Professional Experience
                         </h2>
                         <div className="flex flex-col">
                             {experience.map((item, i) => (
@@ -352,42 +330,6 @@ export function AboutMe() {
                     </div>
 
                 </div>
-
-                {/* ══════════════════════════════════════════
-                    SECTION 3: Clients
-                ══════════════════════════════════════════ */}
-                <div className="about-info-section mt-20 md:mt-28 border-t border-white/10 pt-16">
-                    <div className="grid md:grid-cols-2 gap-10 md:gap-24 mb-12">
-                        <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-                            Clients
-                        </h2>
-                        <p className="text-white/50 text-lg leading-relaxed self-end">
-                            I&apos;ve had the opportunity to collaborate with incredible teams
-                            and brands on meaningful projects, building lasting partnerships
-                            along the way.
-                        </p>
-                    </div>
-
-                    {/* Client list */}
-                    <div className="flex flex-col">
-                        {clients.map((client, i) => (
-                            <div key={i} className="about-row group">
-                                <div className="border-t border-white/10 py-5 flex items-center justify-between cursor-default hover:border-white/20 transition-colors duration-300">
-                                    <span className="text-xl md:text-2xl font-medium text-white/80 group-hover:text-white transition-colors duration-300">
-                                        {client}
-                                    </span>
-                                    <span className="text-white/20 text-sm group-hover:text-[#FF5C00] transition-colors duration-300">
-                                        ↗
-                                    </span>
-                                </div>
-                                {i === clients.length - 1 && (
-                                    <div className="border-t border-white/10" />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
             </section>
         </div>
     )

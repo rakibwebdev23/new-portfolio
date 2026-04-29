@@ -71,7 +71,7 @@ export function Navbar() {
             href: "#",
             hasDropdown: true,
             dropdownItems: [
-                { label: "Services", href: "/services" },
+                { label: "Skills", href: "/services" },
                 { label: "Blog", href: "/blog" },
                 { label: "Contact", href: "/contact" },
             ]
