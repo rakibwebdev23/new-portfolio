@@ -4,8 +4,22 @@ import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import { SectionTitle } from "./ui/section-title"
 
 gsap.registerPlugin(ScrollTrigger)
+
+// ── Helper for Split Characters ────────────────────────────────────────────────
+const SplitChars = ({ text, className, style }: { text: string, className?: string, style?: any }) => {
+    return (
+        <span className={className} style={style}>
+            {text.split("").map((char, i) => (
+                <span key={i} className="text-char">
+                    {char}
+                </span>
+            ))}
+        </span>
+    )
+}
 
 // ── Data ───────────────────────────────────────────────────────────────────
 const floatingImages = [
@@ -80,6 +94,7 @@ export function AboutMe() {
     const headlineRef = useRef<HTMLDivElement>(null)
     const profileRef = useRef<HTMLDivElement>(null)
     const infoRef = useRef<HTMLDivElement>(null)
+    const h1Ref = useRef<HTMLHeadingElement>(null)
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -118,6 +133,19 @@ export function AboutMe() {
                 { opacity: 0, y: 100, scale: 0.9 },
                 { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power2.out" },
                 0
+            )
+
+            // Text fill effect - character by character
+            const chars = gsap.utils.toArray(".text-char");
+            tl.fromTo(chars,
+                { color: "rgba(255,255,255,0.15)" },
+                {
+                    color: "rgba(255,255,255,1)",
+                    duration: 0.1,
+                    stagger: 2 / chars.length, // Distribute the stagger over exactly 2 seconds of timeline
+                    ease: "none"
+                },
+                0.2
             )
 
             // Images spread outwards
@@ -208,36 +236,35 @@ export function AboutMe() {
                     ref={headlineRef}
                     className="relative z-10 text-center px-6 max-w-4xl mx-auto opacity-0"
                 >
-                    <h1 className="text-5xl md:text-6xl lg:text-8xl leading-[1.0] font-black mb-8 tracking-tight drop-shadow-2xl">
-                        <span className="uppercase">Hello I&apos;m </span>
-                        <span
+                    <h1
+                        ref={h1Ref}
+                        className="text-5xl md:text-6xl lg:text-8xl leading-[1.0] font-black mb-8 tracking-tight drop-shadow-2xl"
+                    >
+                        <SplitChars text="Hello I'm " className="uppercase" />
+                        <SplitChars
+                            text="Rakib, "
                             className="italic font-normal"
                             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                        >
-                            Rakib,{" "}
-                        </span>
-                        <span className="uppercase">a MERN-Stack</span>
+                        />
+                        <SplitChars text="a MERN-Stack" className="uppercase" />
                         <br />
-                        <span
+                        <SplitChars
+                            text="developer"
                             className="italic font-normal"
                             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                        >
-                            developer
-                        </span>
-                        <span className="uppercase"> &amp; </span>
-                        <span
+                        />
+                        <SplitChars text=" & " className="uppercase" />
+                        <SplitChars
+                            text="designer "
                             className="italic font-normal"
                             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                        >
-                            designer{" "}
-                        </span>
-                        <span className="uppercase">BASED IN </span>
-                        <span
+                        />
+                        <SplitChars text="BASED IN " className="uppercase" />
+                        <SplitChars
+                            text="Dhaka"
                             className="italic font-normal"
                             style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                        >
-                            Dhaka
-                        </span>
+                        />
                     </h1>
 
                     <p className="text-white/50 text-base md:text-lg leading-relaxed max-w-xl mx-auto drop-shadow-xl">
@@ -273,9 +300,9 @@ export function AboutMe() {
 
                     {/* Education */}
                     <div className="about-info-section">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
+                        <SectionTitle className="mb-10 text-4xl md:text-5xl">
                             Education
-                        </h2>
+                        </SectionTitle>
                         <div className="flex flex-col">
                             {education.map((item, i) => (
                                 <div key={i} className="about-row group">
@@ -302,9 +329,9 @@ export function AboutMe() {
 
                     {/* Experience */}
                     <div className="about-info-section">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
+                        <SectionTitle className="mb-10 text-4xl md:text-5xl">
                             Professional Experience
-                        </h2>
+                        </SectionTitle>
                         <div className="flex flex-col">
                             {experience.map((item, i) => (
                                 <div key={i} className="about-row group">

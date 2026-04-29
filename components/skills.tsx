@@ -12,6 +12,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { cn } from "@/lib/utils"
 import CommonWrapper from "./CommonWrapper"
+import { SectionTitle } from "./ui/section-title"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -200,10 +201,10 @@ export function Skills() {
                         My Skills
                     </span>
                     <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-28">
-                        <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+                        <SectionTitle className="text-4xl md:text-6xl text-white">
                             Expertise <br />
                             & Tech Stack
-                        </h2>
+                        </SectionTitle>
                     </div>
                 </div>
 

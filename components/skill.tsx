@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { SectionTitle } from "./ui/section-title"
 
 interface SkillItem {
     name: string;
@@ -18,28 +19,28 @@ const frontendStack: SkillItem[] = [
     { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
     { name: "Redux Toolkit", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
     { name: "Zustand", icon: "/images/zustand.svg", isWhite: false },
-    { name: "ShadCN UI", icon: "https://cdn.simpleicons.org/shadcnui/white" },
-    { name: "Framer Motion", icon: "https://cdn.simpleicons.org/framer/white" },
-    { name: "GSAP", icon: "https://cdn.simpleicons.org/greensock/green" },
+    { name: "ShadCN UI", icon: "/images/shadcn.png" },
+    { name: "Framer Motion", icon: "/images/framer-motion.svg" },
+    { name: "GSAP", icon: "/images/gsap.svg" },
 ]
 
 const backendToolsStack: SkillItem[] = [
     { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-    { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/white" },
+    { name: "Express.js", icon: "/images/express.png" },
     { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-    { name: "Mongoose", icon: "https://cdn.simpleicons.org/mongoose/red" },
+    { name: "Mongoose", icon: "/images/mongoose.svg" },
     { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-    { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
+    { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", isWhite: true },
     { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
     { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" },
-    { name: "Vercel", icon: "https://cdn.simpleicons.org/vercel/white" },
+    { name: "Vercel", icon: "/images/vercel.svg" },
 ]
 
 const Skill = () => {
     return (
         <section className="py-24 bg-[#0A0A0A] overflow-hidden">
             <div className="container mx-auto px-4 mb-20 text-center">
-                <h2 className="text-white text-xl font-medium tracking-tight">My Expertise</h2>
+                <SectionTitle className="text-xl md:text-3xl font-medium tracking-tight text-white mb-0">My Expertise</SectionTitle>
             </div>
 
             {/* Row 1: Frontend */}

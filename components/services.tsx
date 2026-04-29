@@ -6,6 +6,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
 import CommonWrapper from "./CommonWrapper"
+import { SectionTitle } from "./ui/section-title"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -167,10 +168,10 @@ export function Services() {
                     </span>
                     <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-28">
 
-                        <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+                        <SectionTitle className="text-4xl md:text-6xl text-white">
                             My Skills <br />
                             & Tech Stack
-                        </h2>
+                        </SectionTitle>
                         {/* <div className="flex items-end">
                             <p className="text-white/60 text-base max-w-md leading-relaxed">
                                 Welcome to the heart of innovation, where design meets purpose.

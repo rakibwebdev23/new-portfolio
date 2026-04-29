@@ -7,6 +7,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
 import CommonWrapper from "./CommonWrapper"
+import { SectionTitle } from "./ui/section-title"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -133,9 +134,9 @@ export function Testimonial() {
                             <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
                             Testimonial
                         </span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                        <SectionTitle className="text-3xl md:text-4xl text-white mb-6">
                             Empowering user experiences
-                        </h2>
+                        </SectionTitle>
 
                         <p className="text-white/70 text-lg leading-relaxed mb-8">
                             &ldquo;{t.quote}&rdquo;
