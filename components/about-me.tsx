@@ -1,156 +1,394 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import CommonWrapper from "./CommonWrapper"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Image from "next/image"
 
 gsap.registerPlugin(ScrollTrigger)
 
-const stats = [
-    { value: "5+", label: "Years of experience" },
-    { value: "30+", label: "Projects Completed" },
-    { value: "98%", label: "Client Satisfaction" }
+// ── Data ───────────────────────────────────────────────────────────────────
+const floatingImages = [
+    {
+        src: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&auto=format&fit=crop&q=60",
+        alt: "UI/UX Design work",
+        spreadX: "-35vw",
+        spreadY: "-30vh",
+        rotation: -12,
+        width: "360px",
+        height: "440px",
+    },
+    {
+        src: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=60",
+        alt: "Branding design work",
+        spreadX: "35vw",
+        spreadY: "-32vh",
+        rotation: 15,
+        width: "340px",
+        height: "400px",
+    },
+    {
+        src: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&auto=format&fit=crop&q=60",
+        alt: "Web design work",
+        spreadX: "-38vw",
+        spreadY: "32vh",
+        rotation: -8,
+        width: "420px",
+        height: "280px",
+    },
+    {
+        src: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&auto=format&fit=crop&q=60",
+        alt: "App design work",
+        spreadX: "35vw",
+        spreadY: "30vh",
+        rotation: 18,
+        width: "320px",
+        height: "380px",
+    },
 ]
 
+const education = [
+    {
+        degree: "B.Sc in Computer Science & Engineering",
+        institution: "Green University of Bangladesh",
+        year: "2020–2024",
+    },
+    {
+        degree: "HSC in Science",
+        institution: "Dhaka City College",
+        year: "2018–2020",
+    },
+    {
+        degree: "Certification in MERN Stack Development",
+        institution: "Programming Hero",
+        year: "2022",
+    },
+]
+
+const experience = [
+    {
+        role: "Frontend Developer",
+        company: "Softvence Agency, Dhaka",
+        year: "2025–Present",
+    },
+    {
+        role: "Junior Frontend Developer",
+        company: "Freelance / Remote",
+        year: "2023–2025",
+    },
+    {
+        role: "Intern – Web Development",
+        company: "Tech Startup, Dhaka",
+        year: "2022",
+    },
+]
+
+const clients = [
+    "Softvence Agency",
+    "Dream Keeper",
+    "SaaS Startups",
+    "E-Commerce Brands",
+    "Creative Studios",
+    "Digital Agencies",
+]
+
+// ── Component ──────────────────────────────────────────────────────────────
 export function AboutMe() {
-    const sectionRef = useRef<HTMLDivElement>(null)
-    const counterRefs = useRef<(HTMLSpanElement | null)[]>([])
+    const componentRef = useRef<HTMLDivElement>(null)
+    const heroRef = useRef<HTMLElement>(null)
+    const imgRefs = useRef<(HTMLDivElement | null)[]>([])
+    const headlineRef = useRef<HTMLDivElement>(null)
+    const profileRef = useRef<HTMLDivElement>(null)
+    const infoRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // General entrance for cards
-            gsap.from(".bento-card", {
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 75%",
-                    toggleActions: "play none none reverse"
-                },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.15,
-                ease: "power4.out"
+            // Initial setting for the messy pile of images
+            // Give them some random rotations so it looks like a pile
+            imgRefs.current.forEach((el, i) => {
+                if (!el) return
+                gsap.set(el, {
+                    xPercent: -50,
+                    yPercent: -50,
+                    rotation: gsap.utils.random(-25, 25),
+                    scale: 1.5,
+                })
             })
 
-            // Animate stats counters
-            counterRefs.current.forEach((ref, index) => {
-                if (ref) {
-                    const rawVal = stats[index].value.replace(/[^0-9]/g, '')
-                    const suffix = stats[index].value.replace(/[0-9]/g, '')
-                    gsap.fromTo(
-                        { val: 0 },
-                        { val: parseInt(rawVal) },
-                        {
-                            duration: 2.5,
-                            ease: "power2.out",
-                            scrollTrigger: {
-                                trigger: ref,
-                                start: "top 85%",
-                                toggleActions: "play none none none"
-                            },
-                            onUpdate: function () {
-                                if (ref) {
-                                    ref.textContent = Math.round(this.targets()[0].val) + suffix
-                                }
-                            }
-                        }
-                    )
+            // Fix the GSAP transform overwriting translate(-50%, -50%) for the profile image
+            gsap.set(profileRef.current, {
+                xPercent: -50,
+                yPercent: -50,
+            })
+
+            // SCROLL TRIGGER TIMELINE FOR HERO
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: heroRef.current,
+                    start: "top top",
+                    end: "+=2000",
+                    scrub: 1,
+                    pin: true,
                 }
             })
-        }, sectionRef)
+
+            // Phase 1: Spread out the images and reveal headline
+            // The headline starts invisible and moves up
+            tl.fromTo(headlineRef.current,
+                { opacity: 0, y: 100, scale: 0.9 },
+                { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power2.out" },
+                0
+            )
+
+            // Images spread outwards
+            imgRefs.current.forEach((el, i) => {
+                if (!el) return
+                tl.to(el, {
+                    x: floatingImages[i].spreadX,
+                    y: floatingImages[i].spreadY,
+                    rotation: floatingImages[i].rotation,
+                    scale: 1,
+                    duration: 2,
+                    ease: "power2.inOut"
+                }, 0)
+            })
+
+            // Phase 2: Profile Image comes up from the bottom
+            tl.fromTo(profileRef.current,
+                { y: "60vh", opacity: 0, rotation: -10 },
+                { y: "5vh", opacity: 1, rotation: 0, duration: 2, ease: "power3.out" },
+                "+=0.2" // start slightly after spread
+            )
+
+            // Info sections
+            gsap.from(".about-info-section", {
+                scrollTrigger: {
+                    trigger: infoRef.current,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse",
+                },
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power3.out",
+            })
+
+            // Table rows animate in
+            gsap.from(".about-row", {
+                scrollTrigger: {
+                    trigger: infoRef.current,
+                    start: "top 70%",
+                    toggleActions: "play none none reverse",
+                },
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "power3.out",
+            })
+        }, componentRef)
 
         return () => ctx.revert()
     }, [])
 
     return (
-        <section ref={sectionRef} className="py-24 md:py-32 bg-[#020617] relative overflow-hidden min-h-screen flex items-center">
-            {/* ── Background Atmospheric Glows ── */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-orange-600/5 rounded-full blur-[140px]" />
-                <div className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[140px]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,#020617_100%)]" />
-            </div>
+        <div ref={componentRef} className="bg-[#080808] text-white">
 
-            <CommonWrapper className="relative z-10">
-                <div className="flex flex-col gap-10">
-                    {/* Header */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-4">
-                        <div className="max-w-2xl">
-                            <span className="text-[#FF5C00] text-sm font-bold uppercase tracking-[0.4em] mb-4 block">
-                                Professional Overview
-                            </span>
-                            <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-                                Md Rakib Hasan <br />
-                                <span className="text-white/40">Full-Stack Architect</span>
-                            </h2>
+            {/* ══════════════════════════════════════════
+                SECTION 1: HERO — scattered image collage
+            ══════════════════════════════════════════ */}
+            <section ref={heroRef} className="relative min-h-screen overflow-hidden flex items-center justify-center">
+
+                {/* Scattered image cards — positioned absolute in the center initially (messy pile) */}
+                {floatingImages.map((img, i) => (
+                    <div
+                        key={i}
+                        ref={(el) => { imgRefs.current[i] = el }}
+                        className="absolute top-1/2 left-1/2 rounded-2xl overflow-hidden shadow-2xl will-change-transform"
+                        style={{
+                            width: img.width,
+                            height: img.height,
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            zIndex: 1,
+                        }}
+                    >
+                        <Image
+                            src={img.src}
+                            alt={img.alt}
+                            fill
+                            sizes="400px"
+                            className="object-cover"
+                        />
+                    </div>
+                ))}
+
+                {/* Centre: Headline + Bio (z above background images) */}
+                <div
+                    ref={headlineRef}
+                    className="relative z-10 text-center px-6 max-w-4xl mx-auto opacity-0"
+                >
+                    <h1 className="text-5xl md:text-6xl lg:text-8xl leading-[1.0] font-black mb-8 tracking-tight drop-shadow-2xl">
+                        <span className="uppercase">Hello I&apos;m </span>
+                        <span
+                            className="italic font-normal"
+                            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                        >
+                            Rakib,{" "}
+                        </span>
+                        <span className="uppercase">a MERN-Stack</span>
+                        <br />
+                        <span
+                            className="italic font-normal"
+                            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                        >
+                            developer
+                        </span>
+                        <span className="uppercase"> &amp; </span>
+                        <span
+                            className="italic font-normal"
+                            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                        >
+                            designer{" "}
+                        </span>
+                        <span className="uppercase">BASED IN </span>
+                        <span
+                            className="italic font-normal"
+                            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                        >
+                            Dhaka
+                        </span>
+                    </h1>
+
+                    <p className="text-white/50 text-base md:text-lg leading-relaxed max-w-xl mx-auto drop-shadow-xl">
+                        I specialize in crafting high-performance web applications, blending
+                        technical precision with creative design thinking. My work bridges
+                        scalable backend systems and polished, engaging frontends.
+                    </p>
+                </div>
+
+                {/* Profile Image - Comes up from the bottom over the text */}
+                <div
+                    ref={profileRef}
+                    className="absolute top-1/2 left-1/2 w-[260px] h-[350px] md:w-[320px] md:h-[420px] rounded-2xl overflow-hidden shadow-2xl z-30 pointer-events-none opacity-0"
+                >
+                    <Image
+                        src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=60"
+                        alt="My Profile Picture"
+                        fill
+                        sizes="320px"
+                        className="object-cover"
+                    />
+                    <div className="absolute inset-0 border border-white/20 rounded-2xl"></div>
+                </div>
+
+                {/* Bottom fade to next section */}
+                <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#080808] to-transparent z-20 pointer-events-none" />
+            </section>
+
+            {/* ══════════════════════════════════════════
+                SECTION 2: Education + Experience (2-col table)
+            ══════════════════════════════════════════ */}
+            <section ref={infoRef} className="pb-20 md:pb-32 px-6 md:px-12 lg:px-20 max-w-[1440px] mx-auto">
+
+                <div className="grid md:grid-cols-2 gap-16 md:gap-24">
+
+                    {/* Education */}
+                    <div className="about-info-section">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
+                            Education
+                        </h2>
+                        <div className="flex flex-col">
+                            {education.map((item, i) => (
+                                <div key={i} className="about-row group">
+                                    <div className="border-t border-white/10 py-6 flex items-start justify-between gap-4 hover:border-white/20 transition-colors duration-300">
+                                        <div>
+                                            <p className="text-white text-base font-medium leading-snug mb-1">
+                                                {item.degree}
+                                            </p>
+                                            <p className="text-white/40 text-sm">
+                                                {item.institution}
+                                            </p>
+                                        </div>
+                                        <span className="text-white/30 text-sm shrink-0 mt-0.5">
+                                            {item.year}
+                                        </span>
+                                    </div>
+                                    {i === education.length - 1 && (
+                                        <div className="border-t border-white/10" />
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                        <div className="h-px flex-1 bg-white/10 hidden md:block mb-6 ml-12"></div>
                     </div>
 
-                    {/* Bento Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-                        {/* Bio Card (Large) */}
-                        <div className="md:col-span-2 lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col justify-between group hover:bg-white/[0.05] transition-all duration-500">
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-[#FF5C00]"></span>
-                                    The Narrative
-                                </h3>
-                                <p className="text-white/60 text-lg leading-relaxed">
-                                    Motivated MERN Stack Developer with strong expertise in modern frontend frameworks and backend technologies.
-                                    Experienced in leading teams and building scalable SaaS dashboards, role-based systems, and performance-optimized web applications.
-                                    I blend technical precision with creative problem-solving to deliver high-impact digital solutions.
-                                </p>
-                            </div>
-                            <div className="mt-8 flex items-center gap-4 text-[#FF5C00] font-bold text-sm tracking-widest uppercase">
-                                Crafting Excellence
-                            </div>
-                        </div>
-
-                        {/* Career Card (Vertical) */}
-                        <div className="md:col-span-1 lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col group hover:bg-white/[0.05] transition-all duration-500">
-                            <h3 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                                Current Mission
-                            </h3>
-                            <div className="space-y-6">
-                                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5">
-                                    <p className="text-[#FF5C00] text-xs font-black uppercase tracking-tighter mb-1">June 2025 — Present</p>
-                                    <h4 className="text-2xl font-bold text-white">Frontend Developer</h4>
-                                    <p className="text-white/50 font-medium">Softvence Agency, Dhaka</p>
+                    {/* Experience */}
+                    <div className="about-info-section">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-10 leading-tight">
+                            Experience
+                        </h2>
+                        <div className="flex flex-col">
+                            {experience.map((item, i) => (
+                                <div key={i} className="about-row group">
+                                    <div className="border-t border-white/10 py-6 flex items-start justify-between gap-4 hover:border-white/20 transition-colors duration-300">
+                                        <div>
+                                            <p className="text-white text-base font-medium leading-snug mb-1">
+                                                {item.role}
+                                            </p>
+                                            <p className="text-white/40 text-sm">
+                                                {item.company}
+                                            </p>
+                                        </div>
+                                        <span className="text-white/30 text-sm shrink-0 mt-0.5">
+                                            {item.year}
+                                        </span>
+                                    </div>
+                                    {i === experience.length - 1 && (
+                                        <div className="border-t border-white/10" />
+                                    )}
                                 </div>
-                                <div className="space-y-4 text-white/40 text-sm italic border-l-2 border-white/5 pl-6">
-                                    "Leading frontend architecture and optimizing React-based systems for high-traffic agency clients."
+                            ))}
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* ══════════════════════════════════════════
+                    SECTION 3: Clients
+                ══════════════════════════════════════════ */}
+                <div className="about-info-section mt-20 md:mt-28 border-t border-white/10 pt-16">
+                    <div className="grid md:grid-cols-2 gap-10 md:gap-24 mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                            Clients
+                        </h2>
+                        <p className="text-white/50 text-lg leading-relaxed self-end">
+                            I&apos;ve had the opportunity to collaborate with incredible teams
+                            and brands on meaningful projects, building lasting partnerships
+                            along the way.
+                        </p>
+                    </div>
+
+                    {/* Client list */}
+                    <div className="flex flex-col">
+                        {clients.map((client, i) => (
+                            <div key={i} className="about-row group">
+                                <div className="border-t border-white/10 py-5 flex items-center justify-between cursor-default hover:border-white/20 transition-colors duration-300">
+                                    <span className="text-xl md:text-2xl font-medium text-white/80 group-hover:text-white transition-colors duration-300">
+                                        {client}
+                                    </span>
+                                    <span className="text-white/20 text-sm group-hover:text-[#FF5C00] transition-colors duration-300">
+                                        ↗
+                                    </span>
                                 </div>
+                                {i === clients.length - 1 && (
+                                    <div className="border-t border-white/10" />
+                                )}
                             </div>
-                        </div>
-
-                        {/* Stats Cards (Compact) */}
-                        <div className="bento-card p-8 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col items-center justify-center text-center group hover:border-[#FF5C00]/30 transition-all duration-500">
-                            <span ref={(el) => { counterRefs.current[0] = el }} className="text-5xl font-black text-white mb-2">0</span>
-                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Experience</span>
-                        </div>
-
-                        <div className="bento-card p-8 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex flex-col items-center justify-center text-center group hover:border-[#FF5C00]/30 transition-all duration-500">
-                            <span ref={(el) => { counterRefs.current[1] = el }} className="text-5xl font-black text-white mb-2">0</span>
-                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Projects</span>
-                        </div>
-
-                        <div className="lg:col-span-2 bento-card p-8 md:p-10 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 flex items-center justify-between group hover:bg-white/[0.05] transition-all duration-500">
-                            <div className="flex flex-col">
-                                <span ref={(el) => { counterRefs.current[2] = el }} className="text-5xl font-black text-[#FF5C00] mb-1">0</span>
-                                <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Client Satisfaction</span>
-                            </div>
-                            <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5C00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                            </div>
-                        </div>
-
+                        ))}
                     </div>
                 </div>
-            </CommonWrapper>
-        </section>
+
+            </section>
+        </div>
     )
 }
