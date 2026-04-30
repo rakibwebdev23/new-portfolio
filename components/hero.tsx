@@ -329,22 +329,27 @@ export function Hero() {
 
                     {/* CTA row */}
                     <div className="hero-sub flex flex-wrap items-center gap-8 pt-2">
-                        <Link href="/contact" className="block">
-                            <button
-                                className="group relative flex items-center gap-3 border-2 border-[#FF5C00] text-white bg-transparent rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 cursor-pointer overflow-hidden z-10"
-                            >
-                                {/* Default background color */}
-                                <span className="absolute inset-0 bg-[#FF5C00] -z-20" />
+                        <button
+                            onClick={() => {
+                                const el = document.getElementById("contact")
+                                if (el) {
+                                    const top = el.getBoundingClientRect().top + window.scrollY - 100
+                                    window.scrollTo({ top, behavior: "smooth" })
+                                }
+                            }}
+                            className="group relative flex items-center gap-3 border-2 border-[#FF5C00] text-white bg-transparent rounded-full px-9 py-4 text-base font-bold transition-all duration-300 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 cursor-pointer overflow-hidden z-10"
+                        >
+                            {/* Default background color */}
+                            <span className="absolute inset-0 bg-[#FF5C00] -z-20" />
 
-                                {/* Smooth sliding background fill (Black) */}
-                                <span className="absolute inset-0 bg-[#050C1C] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
+                            {/* Smooth sliding background fill (Black) */}
+                            <span className="absolute inset-0 bg-[#050C1C] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
 
-                                <span className="relative z-20 transition-colors duration-300">
-                                    Hire me
-                                </span>
-                                <ArrowRight className="relative z-20 w-5 h-5 transition-all duration-300 group-hover:translate-x-1" />
-                            </button>
-                        </Link>
+                            <span className="relative z-20 transition-colors duration-300">
+                                Hire me
+                            </span>
+                            <ArrowRight className="relative z-20 w-5 h-5 transition-all duration-300 group-hover:translate-x-1" />
+                        </button>
                     </div>
                 </div>
 

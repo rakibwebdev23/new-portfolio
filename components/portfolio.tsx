@@ -267,29 +267,37 @@ interface Project {
     image: string
     tags: string[]
     highlighted?: boolean
+    description?: string
+    url?: string
 }
 
 const projects: Project[] = [
     {
-        title: "Ecommerce app design",
-        category: "Mobile App",
-        image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&auto=format&fit=crop&q=80",
-        tags: ["All", "Mobile App"],
-        highlighted: true
+        title: "FixList \u2013 Service Marketplace Platform",
+        category: "Full Stack",
+        image: "/portfolio/fixlist.png",
+        tags: ["React", "TypeScript", "Tailwind CSS", "ShadCN UI", "Redux Toolkit"],
+        highlighted: true,
+        description: "Developed a service-based marketplace connecting users with service providers. Built user, provider, and admin dashboards covering the complete service lifecycle. Implemented booking, job tracking, and service completion workflows. Integrated payment flow triggered after successful service completion.",
+        url: "https://fixlist-frontend.vercel.app/"
     },
     {
-        title: "Travel website design",
-        category: "UI/UX Design",
-        image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&auto=format&fit=crop&q=80",
-        tags: ["All", "UI/UX Design"],
-        highlighted: false
+        title: "Tape \u2013 SaaS Scheduling & Content Sync Platform",
+        category: "Full Stack",
+        image: "/portfolio/tape.png",
+        tags: ["Next.js", "TypeScript", "Tailwind CSS", "SaaS"],
+        highlighted: false,
+        description: "Developed a SaaS platform for profile management, scheduling, and content synchronization. Built scalable user and admin dashboards using Next.js and TypeScript. Implemented offline-first support enabling access after initial synchronization. Designed role-based UI components and optimized data fetching.",
+        url: "https://lawalax.vercel.app/signin"
     },
     {
-        title: "Agency website design",
-        category: "UI/UX Design",
-        image: "https://images.unsplash.com/photo-1497215842964-222b430dc094?w=600&auto=format&fit=crop&q=80",
-        tags: ["All", "UI/UX Design"],
-        highlighted: false
+        title: "Scorells \u2013 Build Better Credit Platform",
+        category: "Full Stack",
+        image: "/portfolio/scorells.png",
+        tags: ["React.js", "TypeScript", "Tailwind CSS", "AI"],
+        highlighted: false,
+        description: "Built an AI-powered credit improvement platform for individuals and businesses. Implemented credit report analysis, tailored dispute letter generation, and progress tracking. Focused on clean UX and performance-optimized interfaces.",
+        url: "https://scorels-frontend.vercel.app/"
     },
     {
         title: "Aiko brand identity design",
@@ -337,6 +345,7 @@ const cardBgs = [
 export function Portfolio() {
     const [activeFilter, setActiveFilter] = useState("All")
     const sectionRef = useRef<HTMLDivElement>(null)
+    const titleRef = useRef<HTMLHeadingElement>(null)
     const ctxRef = useRef<gsap.Context | null>(null)
 
     const filteredProjects = activeFilter === "All"
@@ -362,6 +371,26 @@ export function Portfolio() {
                 duration: 0.8,
                 ease: "power3.out"
             })
+
+            // Title color: character-by-character gray → black on scroll
+            if (titleRef.current) {
+                const chars = titleRef.current.querySelectorAll(".portfolio-char")
+                gsap.fromTo(chars,
+                    { color: "#b0b0b0" },
+                    {
+                        color: "#050C1C",
+                        duration: 0.1,
+                        stagger: 2 / chars.length,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: titleRef.current,
+                            start: "top 85%",
+                            end: "top 30%",
+                            scrub: 1,
+                        },
+                    }
+                )
+            }
 
             const cards = gsap.utils.toArray<HTMLElement>(".portfolio-slide")
 
@@ -412,7 +441,7 @@ export function Portfolio() {
     }, [filteredProjects])
 
     return (
-        <section ref={sectionRef} className="py-24 bg-[#f5f5f5]">
+        <section id="portfolio" ref={sectionRef} className="pt-24 bg-[#f5f5f5]">
             {/* Section Header */}
             <CommonWrapper>
                 <div className="portfolio-header mb-12">
@@ -421,10 +450,20 @@ export function Portfolio() {
                         Portfolio
                     </span>
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                        <h1 className="text-4xl md:text-6xl font-bold text-[#050C1C] leading-tight">
-                            Let&apos;s have a look at my<br />
-                            latest projects
-                        </h1>
+                        <h2
+                            ref={titleRef}
+                            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] max-w-3xl tracking-tight"
+                        >
+                            {"Let's have a look at my latest projects".split("").map((char, i) => (
+                                <span
+                                    key={i}
+                                    className="portfolio-char"
+                                    style={{ color: "#b0b0b0", whiteSpace: char === " " ? "pre" : "normal" }}
+                                >
+                                    {char}
+                                </span>
+                            ))}
+                        </h2>
 
                         {/* Filter Tags */}
                         {/* <div className="flex flex-wrap gap-3">
@@ -497,8 +536,8 @@ export function Portfolio() {
                                     <h3 className="text-4xl md:text-5xl font-black text-[#050C1C] leading-tight">
                                         {project.title}
                                     </h3>
-                                    <p className="text-gray-500 text-lg max-w-md">
-                                        Innovative {project.category.toLowerCase()} solution developed with technical precision and design elegance.
+                                    <p className="text-gray-500 text-lg max-w-md leading-relaxed">
+                                        {project.description || `Innovative ${project.category.toLowerCase()} solution developed with technical precision and design elegance.`}
                                     </p>
                                     <div className="flex flex-wrap gap-3 mt-2">
                                         {project.tags.map(tag => (
@@ -511,10 +550,12 @@ export function Portfolio() {
                                         ))}
                                     </div>
                                     <Link
-                                        href="#"
+                                        href={project.url || "#"}
+                                        target={project.url ? "_blank" : undefined}
+                                        rel={project.url ? "noopener noreferrer" : undefined}
                                         className="inline-flex items-center gap-3 mt-6 text-[#050C1C] font-bold text-lg group/link"
                                     >
-                                        View Case Study
+                                        View Project
                                         <div className="w-12 h-12 rounded-full bg-[#050C1C] text-white flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:translate-x-2">
                                             <ArrowUpRight className="w-6 h-6" />
                                         </div>

@@ -4,10 +4,11 @@ import { Hero } from "@/components/hero";
 import { AboutMe } from "@/components/about-me";
 // import { Skills } from "@/components/skills";
 import { Portfolio } from "@/components/portfolio";
-import { Testimonial } from "@/components/testimonial";
+// import { Testimonial } from "@/components/testimonial";
 // import { MarqueeText } from "@/components/marquee-text";
 import { Footer } from "@/components/footer";
 import Skill from "@/components/skill";
+import ContactPage from "./contact/page";
 
 export default function Home() {
     return (
@@ -19,7 +20,10 @@ export default function Home() {
             <Skill />
             {/* <Skills /> */}
             <Portfolio />
-            <Testimonial />
+            <div id="contact">
+                <ContactPage />
+            </div>
+            {/* <Testimonial /> */}
             {/* <MarqueeText /> */}
             <Footer />
         </main>

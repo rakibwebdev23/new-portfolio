@@ -40,7 +40,7 @@ const Skill = () => {
     return (
         <section className="py-24 bg-[#0A0A0A] overflow-hidden">
             <div className="container mx-auto px-4 mb-20 text-center">
-                <SectionTitle className="text-xl md:text-3xl font-medium tracking-tight text-white mb-0">My Expertise</SectionTitle>
+                <SectionTitle className="text-4xl md:text-5xl font-bold mb-10">My Expertise</SectionTitle>
             </div>
 
             {/* Row 1: Frontend */}

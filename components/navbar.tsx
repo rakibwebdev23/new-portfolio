@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import CommonWrapper from "./CommonWrapper"
 
@@ -26,6 +26,7 @@ export function Navbar() {
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const pathname = usePathname()
+    const router = useRouter()
     const dropdownRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -59,23 +60,34 @@ export function Navbar() {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
+    const scrollToSection = useCallback((sectionId: string) => {
+        if (pathname !== "/") {
+            router.push(`/#${sectionId}`)
+            return
+        }
+        const el = document.getElementById(sectionId)
+        if (el) {
+            const offset = 100 // account for fixed navbar
+            const top = el.getBoundingClientRect().top + window.scrollY - offset
+            window.scrollTo({ top, behavior: "smooth" })
+        }
+    }, [pathname, router])
+
+    const handleNavClick = (e: React.MouseEvent, href: string) => {
+        if (href.startsWith("#")) {
+            e.preventDefault()
+            scrollToSection(href.slice(1))
+            setMobileMenuOpen(false)
+        }
+    }
+
     const navLinks: NavLink[] = [
         {
             label: "Home",
             href: "/",
         },
-        { label: "About me", href: "/about" },
-        { label: "Portfolio", href: "/portfolio" },
-        {
-            label: "Pages",
-            href: "#",
-            hasDropdown: true,
-            dropdownItems: [
-                { label: "Skills", href: "/services" },
-                { label: "Blog", href: "/blog" },
-                { label: "Contact", href: "/contact" },
-            ]
-        },
+        { label: "About me", href: "#about" },
+        { label: "Portfolio", href: "#portfolio" },
         { label: "Blog", href: "/blog" },
     ]
 
@@ -155,6 +167,7 @@ export function Navbar() {
                                     <Link
                                         key={link.label}
                                         href={link.href}
+                                        onClick={(e) => handleNavClick(e, link.href)}
                                         className={cn(
                                             "relative text-sm font-medium transition-colors duration-200 group py-2",
                                             isActive ? "text-[#FF5C00]" : "text-gray-700 hover:text-[#FF5C00]"
@@ -168,14 +181,12 @@ export function Navbar() {
 
                         {/* Contact Button */}
                         <div className="hidden md:block">
-                            <Link href="/contact">
-                                <Button
-                                    variant="outline"
-                                    className="border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full px-6 py-2 text-sm font-medium transition-all duration-300"
-                                >
-                                    Contact me
-                                </Button>
-                            </Link>
+                            <button
+                                onClick={() => scrollToSection("contact")}
+                                className="border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 cursor-pointer"
+                            >
+                                Contact me
+                            </button>
                         </div>
 
                         {/* Mobile Menu Toggle */}
@@ -229,21 +240,19 @@ export function Navbar() {
                                         <Link
                                             href={link.href}
                                             className="block text-gray-700 hover:text-[#FF5C00] transition-colors text-sm font-medium py-2"
-                                            onClick={() => setMobileMenuOpen(false)}
+                                            onClick={(e) => { handleNavClick(e, link.href); setMobileMenuOpen(false) }}
                                         >
                                             {link.label}
                                         </Link>
                                     )}
                                 </div>
                             ))}
-                            <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                                <Button
-                                    variant="outline"
-                                    className="w-full border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full mt-2"
-                                >
-                                    Contact me
-                                </Button>
-                            </Link>
+                            <button
+                                onClick={() => { scrollToSection("contact"); setMobileMenuOpen(false) }}
+                                className="w-full border-2 border-[#FF5C00] text-[#FF5C00] bg-transparent hover:bg-[#FF5C00] hover:text-white rounded-full mt-2 py-2 text-sm font-medium cursor-pointer"
+                            >
+                                Contact me
+                            </button>
                         </div>
                     </div>
                 </nav>

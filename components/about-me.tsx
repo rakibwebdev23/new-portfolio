@@ -201,7 +201,7 @@ export function AboutMe() {
     }, [])
 
     return (
-        <div ref={componentRef} className="bg-[#080808] text-white">
+        <div id="about" ref={componentRef} className="bg-[#080808] text-white">
 
             {/* ══════════════════════════════════════════
                 SECTION 1: HERO — scattered image collage
