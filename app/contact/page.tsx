@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Navbar } from "@/components/navbar";
@@ -56,19 +57,24 @@ export default function ContactPage() {
             <div className="pt-32 pb-20">
                 <SectionWrapper>
                     {/* Header Section */}
-                    <div className="flex flex-col items-center justify-center mb-24">
-                        <p className="text-xs font-semibold tracking-[0.3em] text-zinc-300 uppercase mb-4">
+                    <div className="flex flex-col items-center justify-center mb-20 md:mb-28">
+                        <p className="text-xs font-bold tracking-[0.4em] text-[#FF5C00] uppercase mb-4">
                             Get in touch
                         </p>
-                        <h1 className="text-6xl md:text-[9rem] leading-none font-bold tracking-tight flex items-center">
-                            <span className="text-white">CONT</span>
+                        <h1 className="text-[10vw] sm:text-[15vw] md:text-[12vw] lg:text-[11rem] leading-none font-black tracking-tighter flex items-center justify-center select-none">
+                            <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">CONT</span>
                             <span
                                 className="text-transparent"
-                                style={{ WebkitTextStroke: "2px #FF5C00" }}
+                                style={{ 
+                                    WebkitTextStroke: "1.5px #FF5C00",
+                                    paintOrder: "stroke fill",
+                                    letterSpacing: "0.02em"
+                                }}
                             >
                                 ACT
                             </span>
                         </h1>
+                        <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#FF5C00] to-transparent mt-8 opacity-50"></div>
                     </div>
 
                     {/* Content Section */}
@@ -138,7 +144,7 @@ export default function ContactPage() {
                             {status === "success" && (
                                 <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/30 rounded-xl px-5 py-4 text-green-400">
                                     <CheckCircle className="w-5 h-5 shrink-0" />
-                                    <p className="text-sm">Message sent! I'll get back to you soon.</p>
+                                    <p className="text-sm">Message sent! I&apos;ll get back to you soon.</p>
                                 </div>
                             )}
                             {status === "error" && (
