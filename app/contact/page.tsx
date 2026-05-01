@@ -8,7 +8,7 @@ import { useState } from "react";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export default function ContactPage() {
+export default function ContactPage({ isEmbedded = false }: { isEmbedded?: boolean }) {
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -52,9 +52,9 @@ export default function ContactPage() {
     };
 
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-white/30">
-            <Navbar />
-            <div className="pt-32 pb-20">
+        <main className={`${isEmbedded ? '' : 'min-h-screen'} bg-black text-white selection:bg-white/30`}>
+            {!isEmbedded && <Navbar />}
+            <div className={`${isEmbedded ? 'pt-16' : 'pt-32'} pb-20`}>
                 <SectionWrapper>
                     {/* Header Section */}
                     <div className="flex flex-col items-center justify-center mb-20 md:mb-28">

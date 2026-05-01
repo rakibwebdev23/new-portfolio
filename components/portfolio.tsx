@@ -274,58 +274,58 @@ interface Project {
 
 const projects: Project[] = [
     {
-        title: "FixList \u2013 Service Marketplace Platform",
+        title: "FixList Marketplace",
         category: "Full Stack",
         image: "/portfolio/fixlist.png",
         tags: ["React", "TypeScript", "Tailwind CSS", "ShadCN UI", "Redux Toolkit"],
         highlighted: true,
-        description: "Developed a service-based marketplace connecting users with service providers. Built user, provider, and admin dashboards covering the complete service lifecycle. Implemented booking, job tracking, and service completion workflows. Integrated payment flow triggered after successful service completion.",
+        description: "Developed a service-based marketplace connecting users with service providers. Built user, provider, and admin dashboards covering the complete service lifecycle.",
         url: "https://fixlist-frontend.vercel.app/"
     },
     {
-        title: "Tape \u2013 SaaS Scheduling & Content Sync Platform",
+        title: "Tape SaaS Platform",
         category: "Full Stack",
         image: "/portfolio/tapes.png",
         tags: ["Next.js", "TypeScript", "Tailwind CSS", "SaaS"],
         highlighted: false,
-        description: "Developed a SaaS platform for profile management, scheduling, and content synchronization. Built scalable user and admin dashboards using Next.js and TypeScript. Implemented offline-first support enabling access after initial synchronization. Designed role-based UI components and optimized data fetching.",
+        description: "Developed a SaaS platform for profile management, scheduling, and content synchronization. Built scalable user and admin dashboards using Next.js and TypeScript.",
         url: "https://lawalax.vercel.app/signin"
     },
     {
-        title: "Scorells \u2013 Build Better Credit Platform",
+        title: "Scorells AI Credit",
         category: "Full Stack",
         image: "/portfolio/scorells.png",
         tags: ["React.js", "TypeScript", "Tailwind CSS", "AI"],
         highlighted: false,
-        description: "Built an AI-powered credit improvement platform for individuals and businesses. Implemented credit report analysis, tailored dispute letter generation, and progress tracking. Focused on clean UX and performance-optimized interfaces.",
+        description: "Built an AI-powered credit improvement platform. Implemented credit report analysis, tailored dispute letter generation, and progress tracking.",
         url: "https://scorels-frontend.vercel.app/"
     },
     {
-        title: "Kicks \u2013 Premium E-commerce Store",
+        title: "Kicks E-commerce",
         category: "E-commerce",
         image: "/portfolio/kick.png",
         tags: ["Next.js", "Redux Toolkit", "Tailwind CSS", "Framer Motion"],
         highlighted: true,
-        description: "Built a high-performance footwear e-commerce platform with a focus on seamless user experience. Integrated Redux for global state management and implemented a sleek, mobile-first design with Tailwind CSS.",
+        description: "Built a high-performance footwear e-commerce platform with a focus on seamless user experience. Integrated Redux for global state management.",
         url: "https://kicks-navy.vercel.app/",
         githubUrl: "https://github.com/rakibwebdev23/kicks"
     },
     {
-        title: "Adminity \u2013 Executive Assistant Booking Platform",
+        title: "Adminity SaaS",
         category: "SaaS / AI Platform",
         image: "/portfolio/adminity.png",
         tags: ["React.js", "TypeScript", "Tailwind CSS", "AI"],
         highlighted: true,
-        description: "Developed an on-demand executive assistant booking platform with AI-matched workflows. Built a modern, responsive UI focused on connecting users with vetted assistants efficiently.",
+        description: "Developed an on-demand executive assistant booking platform with AI-matched workflows. Built a modern, responsive UI focused on connecting users with vetted assistants.",
         url: "https://adminity-rouge.vercel.app/"
     },
     {
-        title: "YouDine \u2013 Analytics Dashboard",
+        title: "YouDine Analytics",
         category: "Analytics / Business Intelligence",
         image: "/portfolio/youdine.png",
         tags: ["Next.js", "TypeScript", "Tailwind CSS", "ShadCN UI"],
         highlighted: true,
-        description: "Built a data-driven analytics dashboard for restaurant and business insights. Visualized key metrics and reports to support data-driven decision making with a clean ShadCN UI interface.",
+        description: "Built a data-driven analytics dashboard for restaurant and business insights. Visualized key metrics and reports to support data-driven decision making.",
         url: "https://youdine-dashboard.vercel.app/analytics"
     }
 ]
@@ -379,13 +379,13 @@ export function Portfolio() {
                 ease: "power3.out"
             })
 
-            // Title color animation
+            // Title color animation - From dark grey to white
             if (titleRef.current) {
                 const chars = titleRef.current.querySelectorAll(".portfolio-char")
                 gsap.fromTo(chars,
-                    { color: "#b0b0b0" },
+                    { color: "#333" },
                     {
-                        color: "#050C1C",
+                        color: "#FFFFFF",
                         duration: 0.1,
                         stagger: 2 / chars.length,
                         ease: "none",
@@ -419,6 +419,32 @@ export function Portfolio() {
                     )
                 }
             })
+
+            // Section Overlap Logic: Pin portfolio and scale it as contact scrolls up
+            const contactSection = document.querySelector("#contact")
+            if (contactSection) {
+                ScrollTrigger.create({
+                    trigger: sectionRef.current,
+                    start: "bottom bottom",
+                    endTrigger: contactSection,
+                    end: "top top",
+                    pin: true,
+                    pinSpacing: false,
+                    scrub: true,
+                })
+
+                gsap.to(sectionRef.current, {
+                    scale: 0.95,
+                    opacity: 0.8,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: contactSection,
+                        start: "top bottom",
+                        end: "top top",
+                        scrub: true,
+                    }
+                })
+            }
         }, sectionRef)
 
         return () => {
@@ -427,23 +453,23 @@ export function Portfolio() {
     }, [filteredProjects])
 
     return (
-        <section id="portfolio" ref={sectionRef} className="pt-24 bg-[#f5f5f5]">
+        <section id="portfolio" ref={sectionRef} className="pt-24 pb-0 bg-black">
             <CommonWrapper>
                 <div className="portfolio-header mb-12 text-center md:text-left">
-                    <span className="text-[#FF5C00] text-sm font-semibold flex items-center justify-center md:justify-start gap-3 mb-5">
-                        <span className="w-8 h-[2px] bg-[#FF5C00] inline-block"></span>
-                        Portfolio
+                    <span className="text-[#FF5C00] text-sm font-bold tracking-[0.4em] uppercase flex items-center justify-center md:justify-start gap-4 mb-6">
+                        <span className="w-12 h-[1px] bg-[#FF5C00]"></span>
+                        Selected Works
                     </span>
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                         <h2
                             ref={titleRef}
-                            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] max-w-3xl tracking-tight text-[#050C1C]"
+                            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] max-w-3xl tracking-tight text-white"
                         >
                             {"Let's have a look at my latest projects".split("").map((char, i) => (
                                 <span
                                     key={i}
                                     className="portfolio-char"
-                                    style={{ color: "#b0b0b0", whiteSpace: char === " " ? "pre" : "normal" }}
+                                    style={{ color: "#333", whiteSpace: char === " " ? "pre" : "normal" }}
                                 >
                                     {char}
                                 </span>
@@ -453,95 +479,92 @@ export function Portfolio() {
                 </div>
             </CommonWrapper>
 
-            <div className="portfolio-stack relative mt-16">
+            <div className="portfolio-stack relative">
                 {filteredProjects.map((project, index) => {
                     const theme = cardThemes[index % cardThemes.length];
                     return (
                         <div
                             key={`${project.title}-${index}`}
-                            className="portfolio-slide"
+                            className="portfolio-slide sticky top-0 h-screen flex items-center justify-center bg-black/0"
                             style={{
-                                position: "sticky",
-                                top: 0,
                                 zIndex: index + 1,
-                                height: "100vh",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: theme.bg,
-                                overflow: "hidden",
-                                willChange: "transform, border-radius",
-                                transformOrigin: "top center",
+                                willChange: "transform",
                             }}
                         >
-                            <CommonWrapper>
+                            <CommonWrapper className="h-[85vh] md:h-[75vh]">
                                 <div
-                                    className="slide-content grid md:grid-cols-2 gap-12 lg:gap-20 items-center w-full"
-                                    style={{ opacity: 0 }}
+                                    className="slide-content w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center p-6 md:p-16 lg:p-20 relative group"
+                                    style={{ 
+                                        backgroundColor: theme.bg,
+                                        opacity: 0,
+                                        transform: "translateY(50px)"
+                                    }}
                                 >
-                                    {/* Image Container - Balanced Size */}
-                                    <div className="relative aspect-[4/3] md:aspect-[1.2/1] rounded-3xl overflow-hidden shadow-2xl group transition-all duration-500 hover:shadow-[#FF5C00]/20">
-                                        <Image
-                                            src={project.image}
-                                            alt={project.title}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500" />
-                                    </div>
-
-                                    {/* Details */}
-                                    <div className="flex flex-col gap-6">
-                                        <span className="text-[#FF5C00] font-bold text-lg uppercase tracking-widest">
-                                            Project // 0{index + 1}
-                                        </span>
-                                        <h3 className={`text-3xl md:text-5xl font-black leading-tight ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}>
-                                            {project.title}
-                                        </h3>
-                                        <p className={`text-base md:text-lg max-w-md leading-relaxed ${theme.isDark ? 'text-white/60' : 'text-gray-500'}`}>
-                                            {project.description || `Innovative ${project.category.toLowerCase()} solution developed with technical precision.`}
-                                        </p>
-                                        
-                                        <div className="flex flex-wrap gap-3 mt-2">
-                                            {project.tags.map(tag => (
-                                                <span
-                                                    key={tag}
-                                                    className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold border transition-colors ${
-                                                        theme.isDark 
-                                                            ? 'bg-white/5 border-white/10 text-white/80' 
-                                                            : 'bg-white border-gray-200 text-gray-600'
-                                                    }`}
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
+                                    <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+                                        {/* Image Container */}
+                                        <div className="relative aspect-[4/3] md:aspect-[1.3/1] rounded-[32px] overflow-hidden shadow-2xl group transition-all duration-700">
+                                            <Image
+                                                src={project.image}
+                                                alt={project.title}
+                                                fill
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-500" />
                                         </div>
 
-                                        <div className="flex items-center gap-6 pt-4">
-                                            <Link
-                                                href={project.url || "#"}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`inline-flex items-center gap-3 font-bold text-lg group/link ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}
-                                            >
-                                                Live Project
-                                                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:text-white group-hover/link:translate-x-2 ${
-                                                    theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
-                                                }`}>
-                                                    <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
-                                                </div>
-                                            </Link>
+                                        {/* Details */}
+                                        <div className="flex flex-col gap-4 md:gap-8">
+                                            <span className="text-[#FF5C00] font-bold text-base md:text-lg uppercase tracking-[0.3em]">
+                                                Project // 0{index + 1}
+                                            </span>
+                                            <h3 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}>
+                                                {project.title}
+                                            </h3>
+                                            <p className={`text-sm md:text-lg max-w-md leading-relaxed ${theme.isDark ? 'text-white/60' : 'text-gray-500'}`}>
+                                                {project.description || `Innovative ${project.category.toLowerCase()} solution developed with technical precision.`}
+                                            </p>
                                             
-                                            {project.githubUrl && (
+                                            <div className="flex flex-wrap gap-2 md:gap-3">
+                                                {project.tags.map(tag => (
+                                                    <span
+                                                        key={tag}
+                                                        className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-sm font-semibold border transition-colors ${
+                                                            theme.isDark 
+                                                                ? 'bg-white/5 border-white/10 text-white/80' 
+                                                                : 'bg-white border-gray-200 text-gray-600'
+                                                        }`}
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            <div className="flex items-center gap-4 md:gap-8 pt-4">
                                                 <Link
-                                                    href={project.githubUrl}
+                                                    href={project.url || "#"}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className={`text-xs font-bold tracking-widest uppercase transition-colors ${theme.isDark ? 'text-white/40 hover:text-white' : 'text-gray-400 hover:text-black'}`}
+                                                    className={`inline-flex items-center gap-3 font-bold text-base md:text-xl group/link ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}
                                                 >
-                                                    Source Code
+                                                    Live Case
+                                                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:text-white group-hover/link:translate-x-2 ${
+                                                        theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
+                                                    }`}>
+                                                        <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7" />
+                                                    </div>
                                                 </Link>
-                                            )}
+                                                
+                                                {project.githubUrl && (
+                                                    <Link
+                                                        href={project.githubUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors ${theme.isDark ? 'text-white/40 hover:text-white' : 'text-gray-400 hover:text-black'}`}
+                                                    >
+                                                        Source Code
+                                                    </Link>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
