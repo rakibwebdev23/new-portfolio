@@ -467,9 +467,9 @@ export function Portfolio() {
                                 willChange: "transform",
                             }}
                         >
-                            <CommonWrapper className="h-[85vh] md:h-[75vh]">
+                            <CommonWrapper>
                                 <div
-                                    className="slide-content w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center p-6 md:p-16 lg:p-20 relative group"
+                                    className="slide-content w-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center px-6 py-6 md:px-16 md:py-16 lg:px-20 lg:py-20 relative group"
                                     style={{
                                         backgroundColor: theme.bg,
                                         opacity: 0,
