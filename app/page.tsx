@@ -20,7 +20,7 @@ export default function Home() {
             <Skill />
             {/* <Skills /> */}
             <Portfolio />
-            <div id="contact" className="relative z-[100] bg-black sticky top-0 shadow-[0_-50px_100px_rgba(0,0,0,0.5)]">
+            <div id="contact" className="relative bg-black">
                 <ContactPage isEmbedded={true} />
                 <Footer />
             </div>

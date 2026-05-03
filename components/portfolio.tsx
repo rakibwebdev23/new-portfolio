@@ -420,31 +420,7 @@ export function Portfolio() {
                 }
             })
 
-            // Section Overlap Logic: Pin portfolio and scale it as contact scrolls up
-            const contactSection = document.querySelector("#contact")
-            if (contactSection) {
-                ScrollTrigger.create({
-                    trigger: sectionRef.current,
-                    start: "bottom bottom",
-                    endTrigger: contactSection,
-                    end: "top top",
-                    pin: true,
-                    pinSpacing: false,
-                    scrub: true,
-                })
-
-                gsap.to(sectionRef.current, {
-                    scale: 0.95,
-                    opacity: 0.8,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: contactSection,
-                        start: "top bottom",
-                        end: "top top",
-                        scrub: true,
-                    }
-                })
-            }
+            // Contact section scroll logic removed as requested by user
         }, sectionRef)
 
         return () => {
