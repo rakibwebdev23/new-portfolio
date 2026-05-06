@@ -420,31 +420,7 @@ export function Portfolio() {
                 }
             })
 
-            // Section Overlap Logic: Pin portfolio and scale it as contact scrolls up
-            const contactSection = document.querySelector("#contact")
-            if (contactSection) {
-                ScrollTrigger.create({
-                    trigger: sectionRef.current,
-                    start: "bottom bottom",
-                    endTrigger: contactSection,
-                    end: "top top",
-                    pin: true,
-                    pinSpacing: false,
-                    scrub: true,
-                })
-
-                gsap.to(sectionRef.current, {
-                    scale: 0.95,
-                    opacity: 0.8,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: contactSection,
-                        start: "top bottom",
-                        end: "top top",
-                        scrub: true,
-                    }
-                })
-            }
+            // Contact section scroll logic removed as requested by user
         }, sectionRef)
 
         return () => {
@@ -491,9 +467,9 @@ export function Portfolio() {
                                 willChange: "transform",
                             }}
                         >
-                            <CommonWrapper className="h-[85vh] md:h-[75vh]">
+                            <CommonWrapper>
                                 <div
-                                    className="slide-content w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center p-6 md:p-16 lg:p-20 relative group"
+                                    className="slide-content w-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center px-6 py-6 md:px-16 md:py-16 lg:px-20 lg:py-20 relative group"
                                     style={{
                                         backgroundColor: theme.bg,
                                         opacity: 0,
@@ -529,8 +505,8 @@ export function Portfolio() {
                                                     <span
                                                         key={tag}
                                                         className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-sm font-semibold border transition-colors ${theme.isDark
-                                                                ? 'bg-white/5 border-white/10 text-white/80'
-                                                                : 'bg-white border-gray-200 text-gray-600'
+                                                            ? 'bg-white/5 border-white/10 text-white/80'
+                                                            : 'bg-white border-gray-200 text-gray-600'
                                                             }`}
                                                     >
                                                         {tag}
@@ -543,12 +519,19 @@ export function Portfolio() {
                                                     href={project.url || "#"}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className={`inline-flex items-center gap-3 font-bold text-base md:text-xl group/link ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}
+                                                    className={`group/link relative inline-flex items-center gap-4 pl-6 md:pl-8 pr-2 py-2 rounded-full font-bold text-base md:text-xl overflow-hidden transition-all duration-300 ${theme.isDark ? 'text-white border border-white/20' : 'text-[#050C1C] border border-[#050C1C]/20'
+                                                        }`}
                                                 >
-                                                    Live Case
-                                                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:text-white group-hover/link:translate-x-2 ${theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
+                                                    {/* Left-to-right background fill */}
+                                                    <span className="absolute inset-0 bg-[#FF5C00] origin-left scale-x-0 transition-transform duration-500 ease-out group-hover/link:scale-x-100 rounded-full" />
+
+                                                    <span className="relative z-10 transition-colors duration-300 group-hover/link:text-white">
+                                                        Live Case
+                                                    </span>
+
+                                                    <div className={`relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-500 ease-out group-hover/link:bg-white group-hover/link:text-[#FF5C00] ${theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
                                                         }`}>
-                                                        <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7" />
+                                                        <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 transition-colors duration-500 ease-out" />
                                                     </div>
                                                 </Link>
 

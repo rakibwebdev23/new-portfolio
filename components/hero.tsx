@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, ArrowUp } from "lucide-react"
+import { ArrowRight, ArrowUp, Github, Linkedin } from "lucide-react"
 import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
 // import { TypeAnimation } from "react-type-animation"
@@ -328,7 +328,7 @@ export function Hero() {
                     </p>
 
                     {/* CTA row */}
-                    <div className="hero-sub flex flex-wrap items-center gap-8 pt-2">
+                    <div className="hero-sub flex flex-wrap items-center gap-6 pt-2">
                         <button
                             onClick={() => {
                                 const el = document.getElementById("contact")
@@ -350,6 +350,25 @@ export function Hero() {
                             </span>
                             <ArrowRight className="relative z-20 w-5 h-5 transition-all duration-300 group-hover:translate-x-1" />
                         </button>
+
+                        <div className="flex items-center gap-3 ml-2">
+                            <Link
+                                href="https://github.com/rakibwebdev23"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-[#050C1C] transition-all duration-300 shadow-lg"
+                            >
+                                <Github className="w-5 h-5" />
+                            </Link>
+                            <Link
+                                href="https://linkedin.com/in/rakibwebdev23"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-[#FF5C00] hover:border-[#FF5C00] hover:text-white transition-all duration-300 shadow-lg"
+                            >
+                                <Linkedin className="w-5 h-5" />
+                            </Link>
+                        </div>
                     </div>
                 </div>
 

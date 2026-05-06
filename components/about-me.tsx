@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
@@ -88,7 +88,47 @@ const experience = [
     }
 ]
 
+const AnimatedCounter = ({ value, label, suffix = "" }: { value: number, label: string, suffix?: string }) => {
+    const numRef = useRef<HTMLSpanElement>(null)
+
+    useEffect(() => {
+        if (!numRef.current) return
+
+        const ctx = gsap.context(() => {
+            const startObj = { val: 0 }
+            gsap.to(startObj, {
+                val: value,
+                duration: 2.5,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: numRef.current,
+                    start: "top 90%",
+                },
+                onUpdate: () => {
+                    if (numRef.current) {
+                        numRef.current.innerText = Math.floor(startObj.val) + suffix
+                    }
+                }
+            })
+        })
+
+        return () => ctx.revert()
+    }, [value, suffix])
+
+    return (
+        <div className="flex flex-col items-start group">
+            <span ref={numRef} className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2 tracking-tighter transition-colors duration-300 group-hover:text-[#FF5C00]">
+                0{suffix}
+            </span>
+            <span className="text-white/50 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] leading-snug">
+                {label}
+            </span>
+        </div>
+    )
+}
+
 export function AboutMe() {
+    const [githubRepos, setGithubRepos] = useState<number>(0)
     const componentRef = useRef<HTMLDivElement>(null)
     const heroRef = useRef<HTMLElement>(null)
     const imgRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -96,6 +136,18 @@ export function AboutMe() {
     const profileRef = useRef<HTMLDivElement>(null)
     const infoRef = useRef<HTMLDivElement>(null)
     const h1Ref = useRef<HTMLHeadingElement>(null)
+
+    // Fetch GitHub Repositories
+    useEffect(() => {
+        fetch("https://api.github.com/users/rakibwebdev23")
+            .then(res => res.json())
+            .then(data => {
+                if (data.public_repos !== undefined) {
+                    setGithubRepos(data.public_repos)
+                }
+            })
+            .catch(console.error)
+    }, [])
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -329,31 +381,40 @@ export function AboutMe() {
                     </div>
 
                     {/* Experience */}
-                    <div className="about-info-section">
-                        <SectionTitle className="mb-10 text-4xl md:text-5xl">
-                            Professional Experience
-                        </SectionTitle>
-                        <div className="flex flex-col">
-                            {experience.map((item, i) => (
-                                <div key={i} className="about-row group">
-                                    <div className="border-t border-white/10 py-6 flex items-start justify-between gap-4 hover:border-white/20 transition-colors duration-300">
-                                        <div>
-                                            <p className="text-white text-base font-medium leading-snug mb-1">
-                                                {item.role}
-                                            </p>
-                                            <p className="text-white/40 text-sm">
-                                                {item.company}
-                                            </p>
+                    <div className="about-info-section flex flex-col h-full">
+                        <div>
+                            <SectionTitle className="mb-10 text-4xl md:text-5xl">
+                                Professional Experience
+                            </SectionTitle>
+                            <div className="flex flex-col">
+                                {experience.map((item, i) => (
+                                    <div key={i} className="about-row group">
+                                        <div className="border-t border-white/10 py-6 flex items-start justify-between gap-4 hover:border-white/20 transition-colors duration-300">
+                                            <div>
+                                                <p className="text-white text-base font-medium leading-snug mb-1">
+                                                    {item.role}
+                                                </p>
+                                                <p className="text-white/40 text-sm">
+                                                    {item.company}
+                                                </p>
+                                            </div>
+                                            <span className="text-white/30 text-sm shrink-0 mt-0.5">
+                                                {item.year}
+                                            </span>
                                         </div>
-                                        <span className="text-white/30 text-sm shrink-0 mt-0.5">
-                                            {item.year}
-                                        </span>
+                                        {i === experience.length - 1 && (
+                                            <div className="border-t border-white/10" />
+                                        )}
                                     </div>
-                                    {i === experience.length - 1 && (
-                                        <div className="border-t border-white/10" />
-                                    )}
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* ── Dynamic Stats (Underneath Experience) ── */}
+                        <div className="mt-auto pt-10 grid grid-cols-3 gap-6 about-row">
+                            <AnimatedCounter value={3} label="Years Experience" suffix="+" />
+                            <AnimatedCounter value={40} label="Total Projects" suffix="+" />
+                            <AnimatedCounter value={githubRepos || 0} label="GitHub Repositories" suffix="" />
                         </div>
                     </div>
 
