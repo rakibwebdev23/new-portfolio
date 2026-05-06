@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, ArrowUp, Github, Linkedin } from "lucide-react"
@@ -32,7 +32,7 @@ export function Hero() {
     }, [])
 
     // Function to animate out characters before changing phrase
-    const animateOutAndChange = () => {
+    const animateOutAndChange = useCallback(() => {
         if (!wordRef.current) return
 
         const tl = gsap.timeline({
@@ -54,7 +54,7 @@ export function Hero() {
             },
             ease: "back.in(2)"
         })
-    }
+    }, [phrases.length])
 
     // Cycle through phrases
     useEffect(() => {
@@ -62,7 +62,7 @@ export function Hero() {
             animateOutAndChange()
         }, 5000)
         return () => clearInterval(interval)
-    }, [])
+    }, [animateOutAndChange])
 
     useGSAP(() => {
         const ctx = gsap.context(() => {

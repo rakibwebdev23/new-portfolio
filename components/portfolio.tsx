@@ -330,8 +330,6 @@ const projects: Project[] = [
     }
 ]
 
-const filterTags = ["All", "Full Stack", "E-commerce", "SaaS / AI Platform", "Analytics / Business Intelligence"]
-
 // const cardBgs = [
 //     "#f5f5f5",
 //     "#eef2ff",
@@ -418,6 +416,22 @@ export function Portfolio() {
                         }
                     )
                 }
+
+                // Stacking effect: scale down the current card as the next one comes up
+                if (i < cards.length - 1) {
+                    const nextCard = cards[i + 1]
+                    gsap.to(card, {
+                        scale: 0.9,
+                        opacity: 0.4,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: nextCard,
+                            start: "top bottom",
+                            end: "top top",
+                            scrub: 1, // Smooth lag for the scrub effect
+                        }
+                    })
+                }
             })
 
             // Contact section scroll logic removed as requested by user
@@ -469,16 +483,16 @@ export function Portfolio() {
                         >
                             <CommonWrapper>
                                 <div
-                                    className="slide-content w-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center px-6 py-6 md:px-16 md:py-16 lg:px-20 lg:py-20 relative group"
+                                    className="slide-content w-full rounded-2xl overflow-hidden flex items-stretch relative group h-[440px] md:h-[520px] lg:h-[600px]"
                                     style={{
                                         backgroundColor: theme.bg,
                                         opacity: 0,
                                         transform: "translateY(50px)"
                                     }}
                                 >
-                                    <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+                                    <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-stretch w-full h-full">
                                         {/* Image Container */}
-                                        <div className="relative aspect-[4/3] md:aspect-[1.3/1] rounded-[32px] overflow-hidden shadow-2xl group transition-all duration-700">
+                                        <div className="relative h-full min-h-[200px] overflow-hidden shadow-2xl group transition-all duration-700">
                                             <Image
                                                 src={project.image}
                                                 alt={project.title}
@@ -489,7 +503,7 @@ export function Portfolio() {
                                         </div>
 
                                         {/* Details */}
-                                        <div className="flex flex-col gap-4 md:gap-8">
+                                        <div className="flex flex-col justify-center gap-4 md:gap-6 py-6 px-6 md:py-8 md:px-10 lg:py-10 lg:pr-20">
                                             <span className="text-[#FF5C00] font-bold text-base md:text-lg uppercase tracking-[0.3em]">
                                                 Project // 0{index + 1}
                                             </span>

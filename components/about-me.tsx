@@ -9,7 +9,6 @@ import { SectionTitle } from "./ui/section-title"
 
 gsap.registerPlugin(ScrollTrigger)
 
-// ── Helper for Split Characters ────────────────────────────────────────────────
 const SplitChars = ({ text, className, style }: { text: string, className?: string, style?: any }) => {
     return (
         <span className={className} style={style}>
@@ -22,7 +21,6 @@ const SplitChars = ({ text, className, style }: { text: string, className?: stri
     )
 }
 
-// ── Data ───────────────────────────────────────────────────────────────────
 const floatingImages = [
     {
         src: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=600&auto=format&fit=crop&q=60",
@@ -153,7 +151,7 @@ export function AboutMe() {
         const ctx = gsap.context(() => {
             // Initial setting for the messy pile of images
             // Give them some random rotations so it looks like a pile
-            imgRefs.current.forEach((el, i) => {
+            imgRefs.current.forEach((el) => {
                 if (!el) return
                 gsap.set(el, {
                     xPercent: -50,
@@ -174,31 +172,43 @@ export function AboutMe() {
                 scrollTrigger: {
                     trigger: heroRef.current,
                     start: "top top",
-                    end: "+=2000",
-                    scrub: 1,
+                    end: "+=2500",
+                    scrub: 1.5,
                     pin: true,
+                    anticipatePin: 1,
                 }
             })
 
             // Phase 1: Spread out the images and reveal headline
-            // The headline starts invisible and moves up
             tl.fromTo(headlineRef.current,
-                { opacity: 0, y: 100, scale: 0.9 },
-                { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power2.out" },
+                { opacity: 0, y: 120, scale: 0.95 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 2.5,
+                    ease: "expo.out",
+                    force3D: true
+                },
                 0
             )
 
-            // Text fill effect - character by character
+            // Text fill effect
             const chars = gsap.utils.toArray(".text-char");
             tl.fromTo(chars,
-                { color: "rgba(255,255,255,0.15)" },
+                {
+                    color: "rgba(255,255,255,0.1)",
+                    y: 10,
+                },
                 {
                     color: "rgba(255,255,255,1)",
+                    y: 0,
                     duration: 0.1,
-                    stagger: 2 / chars.length, // Distribute the stagger over exactly 2 seconds of timeline
-                    ease: "none"
+                    stagger: 2.5 / chars.length,
+                    ease: "power2.out",
+                    force3D: true
                 },
-                0.2
+                0.3
             )
 
             // Images spread outwards
@@ -208,45 +218,60 @@ export function AboutMe() {
                     x: floatingImages[i].spreadX,
                     y: floatingImages[i].spreadY,
                     rotation: floatingImages[i].rotation,
-                    scale: 1,
-                    duration: 2,
-                    ease: "power2.inOut"
+                    scale: 0.95,
+                    duration: 3,
+                    ease: "power4.inOut",
+                    force3D: true
                 }, 0)
             })
 
-            // Phase 2: Profile Image comes up from the bottom
+            // Phase 2: Profile Image reveal
             tl.fromTo(profileRef.current,
-                { y: "60vh", opacity: 0, rotation: -10 },
-                { y: "5vh", opacity: 1, rotation: 0, duration: 2, ease: "power3.out" },
-                "+=0.2" // start slightly after spread
+                { y: "65vh", opacity: 0, rotation: -8, scale: 0.8 },
+                {
+                    y: "5vh",
+                    opacity: 1,
+                    rotation: 0,
+                    scale: 1,
+                    duration: 2.5,
+                    ease: "expo.out",
+                    force3D: true
+                },
+                "+=0.4"
             )
 
-            // Info sections
+            // Info sections reveal
             gsap.from(".about-info-section", {
+                scrollTrigger: {
+                    trigger: infoRef.current,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse",
+                    fastScrollEnd: true,
+                    preventOverlaps: true,
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.25,
+                ease: "expo.out",
+                force3D: true,
+            })
+
+            // Table rows reveal
+            gsap.from(".about-row", {
                 scrollTrigger: {
                     trigger: infoRef.current,
                     start: "top 75%",
                     toggleActions: "play none none reverse",
+                    fastScrollEnd: true,
+                    preventOverlaps: true,
                 },
-                y: 40,
+                y: 30,
                 opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
+                duration: 1,
+                stagger: 0.1,
                 ease: "power3.out",
-            })
-
-            // Table rows animate in
-            gsap.from(".about-row", {
-                scrollTrigger: {
-                    trigger: infoRef.current,
-                    start: "top 70%",
-                    toggleActions: "play none none reverse",
-                },
-                y: 20,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: "power3.out",
+                force3D: true,
             })
         }, componentRef)
 
@@ -272,6 +297,8 @@ export function AboutMe() {
                             height: img.height,
                             border: "1px solid rgba(255,255,255,0.08)",
                             zIndex: 1,
+                            willChange: "transform, opacity",
+                            backfaceVisibility: "hidden"
                         }}
                     >
                         <Image
@@ -288,6 +315,7 @@ export function AboutMe() {
                 <div
                     ref={headlineRef}
                     className="relative z-10 text-center px-6 max-w-4xl mx-auto opacity-0"
+                    style={{ willChange: "transform, opacity", backfaceVisibility: "hidden" }}
                 >
                     <h1
                         ref={h1Ref}
