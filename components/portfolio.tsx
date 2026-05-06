@@ -494,7 +494,7 @@ export function Portfolio() {
                             <CommonWrapper className="h-[85vh] md:h-[75vh]">
                                 <div
                                     className="slide-content w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden flex items-center p-6 md:p-16 lg:p-20 relative group"
-                                    style={{ 
+                                    style={{
                                         backgroundColor: theme.bg,
                                         opacity: 0,
                                         transform: "translateY(50px)"
@@ -523,16 +523,15 @@ export function Portfolio() {
                                             <p className={`text-sm md:text-lg max-w-md leading-relaxed ${theme.isDark ? 'text-white/60' : 'text-gray-500'}`}>
                                                 {project.description || `Innovative ${project.category.toLowerCase()} solution developed with technical precision.`}
                                             </p>
-                                            
+
                                             <div className="flex flex-wrap gap-2 md:gap-3">
                                                 {project.tags.map(tag => (
                                                     <span
                                                         key={tag}
-                                                        className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-sm font-semibold border transition-colors ${
-                                                            theme.isDark 
-                                                                ? 'bg-white/5 border-white/10 text-white/80' 
+                                                        className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-sm font-semibold border transition-colors ${theme.isDark
+                                                                ? 'bg-white/5 border-white/10 text-white/80'
                                                                 : 'bg-white border-gray-200 text-gray-600'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         {tag}
                                                     </span>
@@ -547,13 +546,12 @@ export function Portfolio() {
                                                     className={`inline-flex items-center gap-3 font-bold text-base md:text-xl group/link ${theme.isDark ? 'text-white' : 'text-[#050C1C]'}`}
                                                 >
                                                     Live Case
-                                                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:text-white group-hover/link:translate-x-2 ${
-                                                        theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
-                                                    }`}>
+                                                    <div className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover/link:bg-[#FF5C00] group-hover/link:text-white group-hover/link:translate-x-2 ${theme.isDark ? 'bg-white text-black' : 'bg-[#050C1C] text-white'
+                                                        }`}>
                                                         <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7" />
                                                     </div>
                                                 </Link>
-                                                
+
                                                 {project.githubUrl && (
                                                     <Link
                                                         href={project.githubUrl}
