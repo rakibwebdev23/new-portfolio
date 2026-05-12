@@ -397,44 +397,6 @@ export function Portfolio() {
                 )
             }
 
-            const cards = gsap.utils.toArray<HTMLElement>(".portfolio-slide")
-            cards.forEach((card, i) => {
-                const content = card.querySelector<HTMLElement>(".slide-content")
-                if (content) {
-                    gsap.fromTo(content,
-                        { y: 60, opacity: 0 },
-                        {
-                            y: 0,
-                            opacity: 1,
-                            duration: 0.85,
-                            ease: "power3.out",
-                            scrollTrigger: {
-                                trigger: card,
-                                start: "top 85%",
-                                toggleActions: "play none none none",
-                            }
-                        }
-                    )
-                }
-
-                // Stacking effect: scale down the current card as the next one comes up
-                if (i < cards.length - 1) {
-                    const nextCard = cards[i + 1]
-                    gsap.to(card, {
-                        scale: 0.9,
-                        opacity: 0.4,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: nextCard,
-                            start: "top bottom",
-                            end: "top top",
-                            scrub: 1, // Smooth lag for the scrub effect
-                        }
-                    })
-                }
-            })
-
-            // Contact section scroll logic removed as requested by user
         }, sectionRef)
 
         return () => {
@@ -475,8 +437,9 @@ export function Portfolio() {
                     return (
                         <div
                             key={`${project.title}-${index}`}
-                            className="portfolio-slide sticky top-0 h-screen flex items-center justify-center bg-black/0"
+                            className="portfolio-slide sticky h-screen flex items-center justify-center bg-black/0"
                             style={{
+                                top: `${index * 30}px`,
                                 zIndex: index + 1,
                                 willChange: "transform",
                             }}
@@ -486,8 +449,6 @@ export function Portfolio() {
                                     className="slide-content w-full rounded-2xl overflow-hidden flex items-stretch relative group h-[440px] md:h-[520px] lg:h-[600px]"
                                     style={{
                                         backgroundColor: theme.bg,
-                                        opacity: 0,
-                                        transform: "translateY(50px)"
                                     }}
                                 >
                                     <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-stretch w-full h-full">
