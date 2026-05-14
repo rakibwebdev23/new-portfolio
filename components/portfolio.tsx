@@ -439,7 +439,7 @@ export function Portfolio() {
                             key={`${project.title}-${index}`}
                             className="portfolio-slide sticky h-screen flex items-center justify-center bg-black/0"
                             style={{
-                                top: `${index * 30}px`,
+                                top: 0,
                                 zIndex: index + 1,
                                 willChange: "transform",
                             }}
