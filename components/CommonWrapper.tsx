@@ -6,7 +6,6 @@ interface CommonWrapperProps {
     className?: string;
 }
 
-// Define the component
 const CommonWrapper: React.FC<CommonWrapperProps> = ({
     children,
     className = "",
